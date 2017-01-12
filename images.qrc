@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/32px">
+        <file>images/32px/stone_destroy_32px.png</file>
+        <file>images/32px/stone_no_destroy_32px.png</file>
+    </qresource>
+</RCC>

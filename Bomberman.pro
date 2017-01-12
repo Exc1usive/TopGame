@@ -24,8 +24,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        BombermanWidget.cpp
+        BombermanWidget.cpp \
+    Bomberman.cpp \
+    StoneNoDestroy.cpp \
+    StoneDestroy.cpp \
+    Bomb.cpp \
+    Explosion.cpp
 
-HEADERS  += BombermanWidget.h
+HEADERS  += BombermanWidget.h \
+    Bomberman.h \
+    StoneNoDestroy.h \
+    StoneDestroy.h \
+    BombermanTypes.h \
+    Bomb.h \
+    Explosion.h
 
 FORMS    += BombermanWidget.ui
+
+RESOURCES += \
+    sprites.qrc \
+    images.qrc
