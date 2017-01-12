@@ -1,0 +1,4 @@
+#ifndef BOMBERMANTYPES_H
+#define BOMBERMANTYPES_H
+
+#endif // BOMBERMANTYPES_H
