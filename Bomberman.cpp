@@ -3,9 +3,11 @@
 
 #include <QDebug>
 
-Bomberman::Bomberman(QObject *parent) : QObject(parent), QGraphicsItem()
+Bomberman::Bomberman(QString _username, QObject *parent) : QObject(parent), QGraphicsItem()
 {
     texture = new QPixmap();
+    username = _username;
+    this->setData(BombermanTypes::Hero, BombermanTypes::Live);
 
     timerFlicker = new QTimer();
     connect(timerFlicker, &QTimer::timeout, this, &Bomberman::slotTimerFlicker);
@@ -22,29 +24,36 @@ Bomberman::~Bomberman()
 
 }
 
+void Bomberman::kill()
+{
+    timerFlicker->stop();
+    texture->load("");
+    currentFrameX = 0;
+}
+
 void Bomberman::slotTimerFlicker()
 {
     currentFrameX += sizeCellWidth;
-    qDebug() << currentFrameX;
 
     if(currentFrameX >= sizeCellWidth * countFrames)
-    {
-        qDebug() << "set 0";
         currentFrameX = 0;
-    }
 }
 
 void Bomberman::slotTimerGame()
-{
+{    
+    if(this->data(BombermanTypes::Hero).toInt() == BombermanTypes::Dead)
+        return;
+
     if(GetAsyncKeyState(VK_UP))
     {
         changeDirection(BombermanTypes::Up);
 
         for(QGraphicsItem *item : scene()->collidingItems(this))
         {
-            if(item->data(0).toInt() == 1)
+            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion)
             {
-
+                kill();
+                return;
             }
         }
 
@@ -65,9 +74,10 @@ void Bomberman::slotTimerGame()
 
         for(QGraphicsItem *item : scene()->collidingItems(this))
         {
-            if(item->data(0).toInt() == 1)
+            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion)
             {
-
+                kill();
+                return;
             }
         }
 
@@ -88,9 +98,10 @@ void Bomberman::slotTimerGame()
 
         for(QGraphicsItem *item : scene()->collidingItems(this))
         {
-            if(item->data(0).toInt() == 1)
+            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion)
             {
-
+                kill();
+                return;
             }
         }
 
@@ -111,9 +122,10 @@ void Bomberman::slotTimerGame()
 
         for(QGraphicsItem *item : scene()->collidingItems(this))
         {
-            if(item->data(0).toInt() == 1)
+            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion)
             {
-
+                kill();
+                return;
             }
         }
 
@@ -130,8 +142,7 @@ void Bomberman::slotTimerGame()
     }
     if(GetAsyncKeyState(VK_SPACE))
     {
-        Bomb *bomb = new Bomb(QPointF((int (this->x()) / 32) * 32, (int (this->y()) / 32) * 32));
-        scene()->addItem(bomb);
+        emit setBomb(QPointF((int (this->x()) / 32) * 32, (int (this->y()) / 32) * 32), this->data(BombermanTypes), damage);
     }
 
     if(timerFlicker->isActive())
@@ -142,13 +153,13 @@ void Bomberman::slotTimerGame()
         }
         else
         {
-            qDebug() << "stop";
+//            qDebug() << "stop";
             timerFlicker->stop();
         }
     }
 }
 
-void Bomberman::changeDirection(const BombermanTypes::Direction direct)
+void Bomberman::changeDirection(const BombermanTypes::DirectionEnum direct)
 {
     if(direct == direction)
     {

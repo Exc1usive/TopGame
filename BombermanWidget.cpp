@@ -1,3 +1,4 @@
+#include "Bomb.h"
 #include "BombermanWidget.h"
 #include "ui_BombermanWidget.h"
 
@@ -39,7 +40,8 @@ BombermanWidget::BombermanWidget(QWidget *parent) :
     generateStoneDestroy();
     paintMap();
 
-    Bomberman *bomberman = new Bomberman();
+    Bomberman *bomberman = new Bomberman("username1");
+    connect(bomberman, &Bomberman::setBomb, this, &BombermanWidget::slotSetBomb);
     bomberman->setPos(48, 48);
     scene->addItem(bomberman);
 }
@@ -49,11 +51,13 @@ BombermanWidget::~BombermanWidget()
     delete ui;
 }
 
-void BombermanWidget::slotSetBomb(QPointF position)
+void BombermanWidget::slotSetBomb(QPointF position, QString username, int damage)
 {
-//    int row = int (position.y()) / 32;
-//    int col = int (position.x()) / 32;
-//    if(map[row][col] == )
+    int intX
+
+    Bomb *bomb = new Bomb(QPointF((int (position->x()) / 32) * 32, (int (position->y()) / 32) * 32), damage);
+    bomb->setData(BombermanTypes::Username, username);
+    scene()->addItem(bomb);
 }
 
 void BombermanWidget::generateStoneNoDestroy()

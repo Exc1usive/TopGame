@@ -29,7 +29,13 @@ SOURCES += main.cpp\
     StoneNoDestroy.cpp \
     StoneDestroy.cpp \
     Bomb.cpp \
-    Explosion.cpp
+    Explosion.cpp \
+    ExplosionHorizontal.cpp \
+    ExplosionVertical.cpp \
+    ExplosionRightFinish.cpp \
+    ExplosionLeftFinish.cpp \
+    ExplosionUpFinish.cpp \
+    ExplosionDownFinish.cpp
 
 HEADERS  += BombermanWidget.h \
     Bomberman.h \
@@ -37,7 +43,13 @@ HEADERS  += BombermanWidget.h \
     StoneDestroy.h \
     BombermanTypes.h \
     Bomb.h \
-    Explosion.h
+    Explosion.h \
+    ExplosionHorizontal.h \
+    ExplosionVertical.h \
+    ExplosionRightFinish.h \
+    ExplosionLeftFinish.h \
+    ExplosionUpFinish.h \
+    ExplosionDownFinish.h
 
 FORMS    += BombermanWidget.ui
 

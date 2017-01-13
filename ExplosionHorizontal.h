@@ -1,5 +1,5 @@
-#ifndef BOMB_H
-#define BOMB_H
+#ifndef EXPLOSIONHORIZONTAL_H
+#define EXPLOSIONHORIZONTAL_H
 
 #include <QObject>
 #include <QGraphicsItem>
@@ -10,23 +10,16 @@
 #include <windows.h>
 
 #include "BombermanTypes.h"
-#include "Explosion.h"
-#include "ExplosionHorizontal.h"
-#include "ExplosionVertical.h"
-#include "ExplosionDownFinish.h"
-#include "ExplosionUpFinish.h"
-#include "ExplosionLeftFinish.h"
-#include "ExplosionRightFinish.h"
 
-class Bomb : public QObject, public QGraphicsItem
+class ExplosionHorizontal : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 
 public:
-    explicit Bomb(QPointF position, int size = 1, QObject *parent = 0);
-    ~Bomb();
+    explicit ExplosionHorizontal(QPointF position, QObject *parent = 0);
+    ~ExplosionHorizontal();
 
-    void destroy();
+    bool checkCollision();
 
 signals:
 
@@ -34,7 +27,6 @@ public slots:
 
 private slots:
     void slotTimerFlicker();
-    void slotTimerDestroy();
 
 private:
     QPixmap *texture;
@@ -44,12 +36,8 @@ private:
 
     int currentFrameX = 0;
     int countFrames = 0;
-    int distanceDamage = 0;
-
-    Qt::GlobalColor color = Qt::black;
 
     QTimer *timerFlicker;
-    QTimer *timerDestroy;
 
     // QGraphicsItem interface
 protected:
@@ -57,4 +45,4 @@ protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
-#endif // BOMB_H
+#endif // EXPLOSIONHORIZONTAL_H

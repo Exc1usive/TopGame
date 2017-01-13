@@ -5,5 +5,11 @@
         <file>images/32px/sprites/quandSpriteLeft_32px.png</file>
         <file>images/32px/sprites/quandSpriteRight_32px.png</file>
         <file>images/32px/sprites/quandSpriteUp_32px.png</file>
+        <file>images/32px/sprites/spriteExplosionDownFinish.png</file>
+        <file>images/32px/sprites/spriteExplosionHorizontal.png</file>
+        <file>images/32px/sprites/spriteExplosionLeftFinish.png</file>
+        <file>images/32px/sprites/spriteExplosionRightFinish.png</file>
+        <file>images/32px/sprites/spriteExplosionUpFinish.png</file>
+        <file>images/32px/sprites/spriteExplosionVertical.png</file>
     </qresource>
 </RCC>

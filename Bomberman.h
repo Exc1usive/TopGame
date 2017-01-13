@@ -17,11 +17,13 @@ class Bomberman : public QObject, public QGraphicsItem
     Q_OBJECT
 
 public:
-    explicit Bomberman(QObject *parent = 0);
+    explicit Bomberman(QString _username, QObject *parent = 0);
     ~Bomberman();
+    
+    void kill();
 
 signals:
-    void setBomb();
+    void setBomb(QPointF _position, QString _username, int _damage);
 
 public slots:
 
@@ -44,9 +46,12 @@ private:
     QTimer *timerFlicker;
     QTimer *timerGame;
 
-    BombermanTypes::Direction direction = BombermanTypes::Stop;
+    QString username;
+    int damage = 1;
 
-    void changeDirection(const BombermanTypes::Direction direct);
+    BombermanTypes::DirectionEnum direction = BombermanTypes::Stop;
+
+    void changeDirection(const BombermanTypes::DirectionEnum direct);
 
     // QGraphicsItem interface
 protected:

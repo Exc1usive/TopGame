@@ -1,9 +1,10 @@
 #include "Bomb.h"
 
-Bomb::Bomb(QPointF position, QObject *parent) : QObject(parent), QGraphicsItem()
+Bomb::Bomb(QPointF position, int size, QObject *parent) : QObject(parent), QGraphicsItem()
 {
     this->setPos(position);
     this->setData(1, BombermanTypes::Bomb);
+    distanceDamage = size;
 
 //    texture = new QPixmap(":/32px/images/32px/stone_destroy_32px.png");
     currentFrameX = 0;
@@ -47,6 +48,29 @@ void Bomb::slotTimerFlicker()
 void Bomb::slotTimerDestroy()
 {
     setData(1, BombermanTypes::None);
+
+    bool explosionLHBreak = false;
+    for(int i = 1; i < distanceDamage + 1; i++)
+    {
+        ExplosionHorizontal *explosionLH = new ExplosionHorizontal(QPointF(this->x() - sizeCellWidth * i, this->y()));
+        explosionLH->setData(BombermanTypes::Username, this->data(BombermanTypes::Username).toString());
+        scene()->addItem(explosionLH);
+        explosionLHBreak = explosionLH->checkCollision();
+//        if(explosionHBreak)
+//            break;
+    }
+
+    bool explosionRHBreak = false;
+    for(int i = 1; i < distanceDamage + 1; i++)
+    {
+        ExplosionHorizontal *explosionRH = new ExplosionHorizontal(QPointF(this->x() + sizeCellWidth * i, this->y()));
+        explosionRH->setData(BombermanTypes::Username, this->data(BombermanTypes::Username).toString());
+        scene()->addItem(explosionRH);
+        explosionRHBreak = explosionRH->checkCollision();
+//        if(explosionHBreak)
+//            break;
+    }
+
     this->deleteLater();
 }
 

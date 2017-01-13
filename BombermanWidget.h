@@ -23,7 +23,7 @@ public:
     ~BombermanWidget();
 
 private slots:
-    void slotSetBomb(QPointF position);
+    void slotSetBomb(QPointF position, QString username, int damage);
 
 private:
     Ui::BombermanWidget *ui;
