@@ -1,6 +1,9 @@
 <RCC>
     <qresource prefix="/32px">
-        <file>images/32px/sprites/quandSprite_32px.png</file>
         <file>images/32px/sprites/stone_destroy_sprite_32.png</file>
+        <file>images/32px/sprites/quandSpriteDown_32px.png</file>
+        <file>images/32px/sprites/quandSpriteLeft_32px.png</file>
+        <file>images/32px/sprites/quandSpriteRight_32px.png</file>
+        <file>images/32px/sprites/quandSpriteUp_32px.png</file>
     </qresource>
 </RCC>

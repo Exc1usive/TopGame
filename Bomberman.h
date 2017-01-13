@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QPixmap>
+#include <QPixmapCache>
 #include <QTimer>
 #include <windows.h>
 
@@ -30,12 +31,13 @@ private slots:
 
 private:
     QPixmap *texture;
+    QPixmapCache *textures;
 
     int sizeCellWidth = 32;
     int sizeCellHeight = 32;
 
     int currentFrameX = 0;
-    int currentFrameY = 0;
+    int countFrames = 4;
 
     int speed = 4;
 
@@ -43,6 +45,8 @@ private:
     QTimer *timerGame;
 
     BombermanTypes::Direction direction = BombermanTypes::Stop;
+
+    void changeDirection(const BombermanTypes::Direction direct);
 
     // QGraphicsItem interface
 protected:

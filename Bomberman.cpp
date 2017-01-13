@@ -5,12 +5,7 @@
 
 Bomberman::Bomberman(QObject *parent) : QObject(parent), QGraphicsItem()
 {
-    currentFrameX = 96;
-    currentFrameY = 96;
-
-    direction = BombermanTypes::Stop;
-
-    texture = new QPixmap(":/32px/images/32px/sprites/quandSprite_32px.png");
+    texture = new QPixmap();
 
     timerFlicker = new QTimer();
     connect(timerFlicker, &QTimer::timeout, this, &Bomberman::slotTimerFlicker);
@@ -18,6 +13,8 @@ Bomberman::Bomberman(QObject *parent) : QObject(parent), QGraphicsItem()
     timerGame = new QTimer();
     connect(timerGame, &QTimer::timeout, this, &Bomberman::slotTimerGame);
     timerGame->start(20);
+
+    changeDirection(BombermanTypes::Down);
 }
 
 Bomberman::~Bomberman()
@@ -27,15 +24,21 @@ Bomberman::~Bomberman()
 
 void Bomberman::slotTimerFlicker()
 {
+    currentFrameX += sizeCellWidth;
+    qDebug() << currentFrameX;
 
+    if(currentFrameX >= sizeCellWidth * countFrames)
+    {
+        qDebug() << "set 0";
+        currentFrameX = 0;
+    }
 }
 
 void Bomberman::slotTimerGame()
 {
     if(GetAsyncKeyState(VK_UP))
     {
-        direction = BombermanTypes::Up;
-        slotTimerFlicker();
+        changeDirection(BombermanTypes::Up);
 
         for(QGraphicsItem *item : scene()->collidingItems(this))
         {
@@ -58,8 +61,7 @@ void Bomberman::slotTimerGame()
     }
     if(GetAsyncKeyState(VK_DOWN))
     {
-        direction = BombermanTypes::Down;
-        slotTimerFlicker();
+        changeDirection(BombermanTypes::Down);
 
         for(QGraphicsItem *item : scene()->collidingItems(this))
         {
@@ -82,8 +84,7 @@ void Bomberman::slotTimerGame()
     }
     if(GetAsyncKeyState(VK_RIGHT))
     {
-        direction = BombermanTypes::Right;
-        slotTimerFlicker();
+        changeDirection(BombermanTypes::Right);
 
         for(QGraphicsItem *item : scene()->collidingItems(this))
         {
@@ -106,8 +107,7 @@ void Bomberman::slotTimerGame()
     }
     if(GetAsyncKeyState(VK_LEFT))
     {
-        direction = BombermanTypes::Left;
-        slotTimerFlicker();
+        changeDirection(BombermanTypes::Left);
 
         for(QGraphicsItem *item : scene()->collidingItems(this))
         {
@@ -133,6 +133,51 @@ void Bomberman::slotTimerGame()
         Bomb *bomb = new Bomb(QPointF((int (this->x()) / 32) * 32, (int (this->y()) / 32) * 32));
         scene()->addItem(bomb);
     }
+
+    if(timerFlicker->isActive())
+    {
+        if(GetAsyncKeyState(VK_UP) || GetAsyncKeyState(VK_DOWN) || GetAsyncKeyState(VK_LEFT) || GetAsyncKeyState(VK_RIGHT))
+        {
+
+        }
+        else
+        {
+            qDebug() << "stop";
+            timerFlicker->stop();
+        }
+    }
+}
+
+void Bomberman::changeDirection(const BombermanTypes::Direction direct)
+{
+    if(direct == direction)
+    {
+        if(!timerFlicker->isActive())
+        {
+            slotTimerFlicker();
+            timerFlicker->start(100);
+        }
+        return;
+    }
+
+    qDebug() << direct;
+    if(direct == BombermanTypes::Up)
+        texture->load(":/32px/images/32px/sprites/quandSpriteUp_32px.png");
+    else
+        if(direct == BombermanTypes::Down)
+            texture->load(":/32px/images/32px/sprites/quandSpriteDown_32px.png");
+    else
+            if(direct == BombermanTypes::Right)
+                texture->load(":/32px/images/32px/sprites/quandSpriteRight_32px.png");
+    else
+                if(direct == BombermanTypes::Left)
+                    texture->load(":/32px/images/32px/sprites/quandSpriteLeft_32px.png");
+
+    direction = direct;
+    currentFrameX = 0;
+    countFrames = 4;
+    slotTimerFlicker();
+    timerFlicker->start(100);
 }
 
 QRectF Bomberman::boundingRect() const
@@ -142,7 +187,7 @@ QRectF Bomberman::boundingRect() const
 
 void Bomberman::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->drawPixmap(-16, -16, *texture, currentFrameX, currentFrameY, sizeCellWidth, sizeCellHeight);
+    painter->drawPixmap(-16, -16, *texture, currentFrameX, 0, sizeCellWidth, sizeCellHeight);
     Q_UNUSED(option);
     Q_UNUSED(widget);
 }
