@@ -47,7 +47,7 @@ private:
     QTimer *timerGame;
 
     QString username;
-    int damage = 1;
+    int damage = 2;
 
     BombermanTypes::DirectionEnum direction = BombermanTypes::Stop;
 

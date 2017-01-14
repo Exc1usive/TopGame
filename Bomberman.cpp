@@ -21,7 +21,7 @@ Bomberman::Bomberman(QString _username, QObject *parent) : QObject(parent), QGra
 
 Bomberman::~Bomberman()
 {
-
+    disconnect(this);
 }
 
 void Bomberman::kill()
@@ -142,7 +142,7 @@ void Bomberman::slotTimerGame()
     }
     if(GetAsyncKeyState(VK_SPACE))
     {
-        emit setBomb(QPointF((int (this->x()) / 32) * 32, (int (this->y()) / 32) * 32), this->data(BombermanTypes), damage);
+        emit setBomb(QPointF((int (this->x()) / 32) * 32, (int (this->y()) / 32) * 32), this->data(BombermanTypes::Username).toString(), damage);
     }
 
     if(timerFlicker->isActive())
@@ -152,10 +152,7 @@ void Bomberman::slotTimerGame()
 
         }
         else
-        {
-//            qDebug() << "stop";
             timerFlicker->stop();
-        }
     }
 }
 

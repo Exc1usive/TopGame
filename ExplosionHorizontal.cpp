@@ -3,7 +3,7 @@
 #include "Bomberman.h"
 #include "StoneDestroy.h"
 
-ExplosionHorizontal::ExplosionHorizontal(QPointF position, QObject *parent) : QObject(parent)
+ExplosionHorizontal::ExplosionHorizontal(QPointF position, QObject *parent) : QObject(parent), QGraphicsItem()
 {
     this->setPos(position);
     this->setData(BombermanTypes::Objects, BombermanTypes::Explosion);
@@ -38,6 +38,11 @@ bool ExplosionHorizontal::checkCollision()
             this->deleteLater();
             return true;
         }
+        if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::StoneNoDestroy)
+        {
+            this->deleteLater();
+            return true;
+        }
         if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Bomb)
         {
             Bomb *it = qgraphicsitem_cast <Bomb *> (item);
@@ -46,6 +51,7 @@ bool ExplosionHorizontal::checkCollision()
             return true;
         }
     }
+    return false;
 }
 
 void ExplosionHorizontal::slotTimerFlicker()

@@ -1,4 +1,4 @@
-|#include "Bomb.h"
+#include "Bomb.h"
 #include "BombermanWidget.h"
 #include "ui_BombermanWidget.h"
 
@@ -34,7 +34,7 @@ BombermanWidget::BombermanWidget(QWidget *parent) :
     ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    scene->setSceneRect(0, 0, 992, 672);
+    scene->setSceneRect(0, 0, 992, 672);
 
     generateStoneNoDestroy();
     generateStoneDestroy();
@@ -53,17 +53,27 @@ BombermanWidget::~BombermanWidget()
 
 void BombermanWidget::slotSetBomb(QPointF position, QString username, int damage)
 {
-    int intX = (int (position->x()) / 32) * 32;
- 	int intY = (int (position->y()) / 32) * 32;
- 	int row = intY / 32;
- 	int col = intX / 32;
- 	
- 	if(map[row][col] != BombermanTypes::Bomb{
-    	map[row][col] = BombermanTypes::Bomb;
-    	Bomb *bomb = new Bomb(QPointF((int (position->x()) / 32) * 32, (int (position->y()) / 32) * 32), damage);
-    	bomb->setData(BombermanTypes::Username, username);
-    	scene()->addItem(bomb);
-    }
+    int intX = (int (position.x()) / 32) * 32;
+    int intY = (int (position.y()) / 32) * 32;
+    int row = intY / 32;
+    int col = intX / 32;
+
+    if(map[row][col] == BombermanTypes::Bomb)
+        return;
+
+    map[row][col] = BombermanTypes::Bomb;
+    Bomb *bomb = new Bomb(QPointF(intX, intY), damage);
+    connect(bomb, &Bomb::bombDestroyed, this, &BombermanWidget::slotBombDestroyes);
+    bomb->setData(BombermanTypes::Username, username);
+    scene->addItem(bomb);
+}
+
+void BombermanWidget::slotBombDestroyes(QPointF position)
+{
+    int row = position.y() / 32;
+    int col = position.x() / 32;
+
+    map[row][col] = BombermanTypes::None;
 }
 
 void BombermanWidget::generateStoneNoDestroy()

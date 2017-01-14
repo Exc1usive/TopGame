@@ -23,12 +23,13 @@ class Bomb : public QObject, public QGraphicsItem
     Q_OBJECT
 
 public:
-    explicit Bomb(QPointF position, int size = 1, QObject *parent = 0);
+    explicit Bomb(QPointF position, int size, QObject *parent = 0);
     ~Bomb();
 
     void destroy();
 
 signals:
+    void bombDestroyed(QPointF position);
 
 public slots:
 
