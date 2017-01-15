@@ -1,0 +1,73 @@
+#include "BombermanWidget.h"
+#include "ui_BombermanWidget.h"
+
+BombermanWidget::BombermanWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::BombermanWidget)
+{
+    ui->setupUi(this);
+    this->resize(992, 672);
+    this->setFixedSize(992, 672);
+
+    countCols = 31;
+    countRows = 21;
+    sizeCellWidth = 32;
+    sizeCellHeight = 32;
+
+    map.resize(countRows);
+    for(QVector *tmp : map)
+        tmp->resize(countCols);
+
+    scene = new QGraphicsScene();
+
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    scene->setSceneRect(0, 0, 992, 672);
+
+    generateStoneNoDestroy();
+    paintMap();
+
+    Bomberman *bomberman = new Bomberman();
+    bomberman->setPos(0, 0);
+    scene->addItem(bomberman);
+}
+
+BombermanWidget::~BombermanWidget()
+{
+    delete ui;
+}
+
+void BombermanWidget::generateStoneNoDestroy()
+{
+    for(int i = 0; i < countCols; i++)
+    {
+        map[0][i] = BombermanTypes::StoneNoDestroy;
+        map[countRows - 1][i] = BombermanTypes::StoneNoDestroy;
+    }
+    for(int i = 1; i < countRows - 1; i++)
+    {
+        map[i][0] = BombermanTypes::StoneNoDestroy;
+        map[i][countCols - 1] = BombermanTypes::StoneNoDestroy;
+    }
+}
+
+void BombermanWidget::generateStoneDestroy()
+{
+
+}
+
+void BombermanWidget::paintMap()
+{
+    for(int row = 0; row < countRows; row++)
+        for(int col = 0; col < countCols; col++)
+        {
+            if(map[row][col] == BombermanTypes::StoneNoDestroy)
+            {
+                StoneNoDestroy *stoneNoDestroy = new StoneNoDestroy(QPointF(sizeCellWidth * col, sizeCellHeight * row));
+                scene->addItem(stoneNoDestroy);
+            }
+        }
+}

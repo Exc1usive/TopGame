@@ -50,8 +50,13 @@ void Bomb::slotTimerDestroy()
     setData(1, BombermanTypes::None);
     emit bombDestroyed(this->pos());
 
+    Explosion *explosion = new Explosion(this->pos());
+    explosion->setData(BombermanTypes::Username, this->data(BombermanTypes::Username).toString());
+    scene()->addItem(explosion);
+    explosion->checkCollision();
+
     bool explosionLHBreak = false;
-    for(int i = 1; i < distanceDamage + 1; i++)
+    for(int i = 1; i < distanceDamage; i++)
     {
         ExplosionHorizontal *explosionLH = new ExplosionHorizontal(QPointF(this->x() - sizeCellWidth * i, this->y()));
         explosionLH->setData(BombermanTypes::Username, this->data(BombermanTypes::Username).toString());
@@ -60,9 +65,16 @@ void Bomb::slotTimerDestroy()
         if(explosionLHBreak)
             break;
     }
+    if(!explosionLHBreak)
+    {
+        ExplosionLeftFinish *explosionLF = new ExplosionLeftFinish(QPointF(this->x() - sizeCellWidth * distanceDamage, this->y()));
+        explosionLF->setData(BombermanTypes::Username, this->data(BombermanTypes::Username).toString());
+        scene()->addItem(explosionLF);
+        explosionLF->checkCollision();
+    }
 
     bool explosionRHBreak = false;
-    for(int i = 1; i < distanceDamage + 1; i++)
+    for(int i = 1; i < distanceDamage; i++)
     {
         ExplosionHorizontal *explosionRH = new ExplosionHorizontal(QPointF(this->x() + sizeCellWidth * i, this->y()));
         explosionRH->setData(BombermanTypes::Username, this->data(BombermanTypes::Username).toString());
@@ -71,9 +83,16 @@ void Bomb::slotTimerDestroy()
         if(explosionRHBreak)
             break;
     }
+    if(!explosionRHBreak)
+    {
+        ExplosionRightFinish *explosionRF = new ExplosionRightFinish(QPointF(this->x() + sizeCellWidth * distanceDamage, this->y()));
+        explosionRF->setData(BombermanTypes::Username, this->data(BombermanTypes::Username).toString());
+        scene()->addItem(explosionRF);
+        explosionRF->checkCollision();
+    }
 
     bool explosionUVBreak = false;
-    for(int i = 1; i < distanceDamage + 1; i++)
+    for(int i = 1; i < distanceDamage; i++)
     {
         ExplosionVertical *explosionUV = new ExplosionVertical(QPointF(this->x(), this->y() - sizeCellWidth * i));
         explosionUV->setData(BombermanTypes::Username, this->data(BombermanTypes::Username).toString());
@@ -82,9 +101,16 @@ void Bomb::slotTimerDestroy()
         if(explosionUVBreak)
             break;
     }
+    if(!explosionUVBreak)
+    {
+        ExplosionUpFinish *explosionUF = new ExplosionUpFinish(QPointF(this->x(), this->y() - sizeCellWidth * distanceDamage));
+        explosionUF->setData(BombermanTypes::Username, this->data(BombermanTypes::Username).toString());
+        scene()->addItem(explosionUF);
+        explosionUF->checkCollision();
+    }
 
     bool explosionDVBreak = false;
-    for(int i = 1; i < distanceDamage + 1; i++)
+    for(int i = 1; i < distanceDamage; i++)
     {
         ExplosionVertical *explosionDV = new ExplosionVertical(QPointF(this->x(), this->y() + sizeCellWidth * i));
         explosionDV->setData(BombermanTypes::Username, this->data(BombermanTypes::Username).toString());
@@ -92,6 +118,13 @@ void Bomb::slotTimerDestroy()
         explosionDVBreak = explosionDV->checkCollision();
         if(explosionDVBreak)
             break;
+    }
+    if(!explosionDVBreak)
+    {
+        ExplosionDownFinish *explosionDF = new ExplosionDownFinish(QPointF(this->x(), this->y() + sizeCellWidth * distanceDamage));
+        explosionDF->setData(BombermanTypes::Username, this->data(BombermanTypes::Username).toString());
+        scene()->addItem(explosionDF);
+        explosionDF->checkCollision();
     }
 
     this->deleteLater();

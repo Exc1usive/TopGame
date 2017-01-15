@@ -19,7 +19,7 @@ public:
     explicit Explosion(QPointF position, QObject *parent = 0);
     ~Explosion();
 
-    void checkCollision();
+    bool checkCollision();
 
 signals:
 

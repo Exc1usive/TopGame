@@ -1,5 +1,5 @@
-#ifndef BOMBERMAN_H
-#define BOMBERMAN_H
+#ifndef ENEMYNFS_H
+#define ENEMYNFS_H
 
 #include <QObject>
 #include <QGraphicsItem>
@@ -12,28 +12,17 @@
 
 #include "BombermanTypes.h"
 
-class Bomberman : public QObject, public QGraphicsItem
+class EnemyNFS : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit Bomberman(QString _username, QObject *parent = 0);
-    ~Bomberman();
-    
+    explicit EnemyNFS(QPointF position, QObject *parent = 0);
+    ~EnemyNFS();
+
     void kill();
 
-signals:
-    void setBomb(QPointF _position, QString _username, int _damage);
-
-public slots:
-
-private slots:
-    void slotTimerFlicker();
-    void slotTimerGame();
-
-private:
+protected:
     QPixmap *texture;
-    QPixmapCache *textures;
 
     int sizeCellWidth = 32;
     int sizeCellHeight = 32;
@@ -46,8 +35,27 @@ private:
     QTimer *timerFlicker;
     QTimer *timerGame;
 
-    QString username;
-    int damage = 3;
+signals:
+
+public slots:
+
+private slots:
+    void slotTimerFlicker();
+    void slotTimerGame();
+
+private:
+    QPixmap *texture;
+
+    int sizeCellWidth = 32;
+    int sizeCellHeight = 32;
+
+    int currentFrameX = 0;
+    int countFrames = 4;
+
+    int speed = 4;
+
+    QTimer *timerFlicker;
+    QTimer *timerGame;
 
     BombermanTypes::DirectionEnum direction = BombermanTypes::Stop;
 
@@ -59,4 +67,4 @@ protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
-#endif // BOMBERMAN_H
+#endif // ENEMYNFS_H

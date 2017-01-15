@@ -26,6 +26,15 @@ bool ExplosionHorizontal::checkCollision()
 {
     for(QGraphicsItem *item : scene()->collidingItems(this))
     {
+        if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::ExplosionCenter)
+        {
+            this->deleteLater();
+            return true;
+        }
+        if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion)
+        {
+            this->deleteLater();
+        }
         if(item->data(BombermanTypes::Hero).toInt() == BombermanTypes::Live)
         {
             Bomberman *it = qgraphicsitem_cast <Bomberman *> (item);

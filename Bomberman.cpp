@@ -5,6 +5,7 @@
 
 Bomberman::Bomberman(QString _username, QObject *parent) : QObject(parent), QGraphicsItem()
 {
+    setZValue(10);
     texture = new QPixmap();
     username = _username;
     this->setData(BombermanTypes::Hero, BombermanTypes::Live);
@@ -50,7 +51,8 @@ void Bomberman::slotTimerGame()
 
         for(QGraphicsItem *item : scene()->collidingItems(this))
         {
-            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion)
+            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion
+                    || item->data(BombermanTypes::Objects).toInt() == BombermanTypes::ExplosionCenter)
             {
                 kill();
                 return;
@@ -74,7 +76,8 @@ void Bomberman::slotTimerGame()
 
         for(QGraphicsItem *item : scene()->collidingItems(this))
         {
-            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion)
+            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion
+                    || item->data(BombermanTypes::Objects).toInt() == BombermanTypes::ExplosionCenter)
             {
                 kill();
                 return;
@@ -98,7 +101,8 @@ void Bomberman::slotTimerGame()
 
         for(QGraphicsItem *item : scene()->collidingItems(this))
         {
-            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion)
+            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion
+                    || item->data(BombermanTypes::Objects).toInt() == BombermanTypes::ExplosionCenter)
             {
                 kill();
                 return;
@@ -122,7 +126,8 @@ void Bomberman::slotTimerGame()
 
         for(QGraphicsItem *item : scene()->collidingItems(this))
         {
-            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion)
+            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion
+                    || item->data(BombermanTypes::Objects).toInt() == BombermanTypes::ExplosionCenter)
             {
                 kill();
                 return;
