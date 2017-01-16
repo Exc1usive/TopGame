@@ -173,7 +173,6 @@ void Bomberman::changeDirection(const BombermanTypes::DirectionEnum direct)
         return;
     }
 
-    qDebug() << direct;
     if(direct == BombermanTypes::Up)
         texture->load(":/32px/images/32px/sprites/quandSpriteUp_32px.png");
     else

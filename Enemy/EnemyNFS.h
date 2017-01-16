@@ -12,7 +12,7 @@
 
 #include "BombermanTypes.h"
 
-class EnemyNFS : public QObject
+class EnemyNFS : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
@@ -33,12 +33,16 @@ protected:
     int speed = 4;
     int health = 2;
 
+    bool inBomb = false;
+
     QTimer *timerFlicker;
     QTimer *timerGame;
 
     BombermanTypes::DirectionEnum direction = BombermanTypes::Stop;
 
+    void changeDirectionRandom(bool checkCurrent = false);
     void changeDirection(const BombermanTypes::DirectionEnum direct);
+    void changeDirectionCollisionBomb();
 
 //    QGraphicsItem interface
     QRectF boundingRect() const;

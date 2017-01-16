@@ -1,4 +1,5 @@
 #include "Bomb.h"
+#include "Enemy/EnemyNFS.h"
 #include "BombermanWidget.h"
 #include "ui_BombermanWidget.h"
 
@@ -37,13 +38,16 @@ BombermanWidget::BombermanWidget(QWidget *parent) :
     scene->setSceneRect(0, 0, 992, 672);
 
     generateStoneNoDestroy();
-    generateStoneDestroy();
+//    generateStoneDestroy();
     paintMap();
 
     Bomberman *bomberman = new Bomberman("username1");
     connect(bomberman, &Bomberman::setBomb, this, &BombermanWidget::slotSetBomb);
-    bomberman->setPos(48, 48);
+    bomberman->setPos(48, 80);
     scene->addItem(bomberman);
+
+    EnemyNFS *enemy = new EnemyNFS(QPointF(64, 32));
+    scene->addItem(enemy);
 }
 
 BombermanWidget::~BombermanWidget()
@@ -103,6 +107,7 @@ void BombermanWidget::generateStoneDestroy()
     for(int row = 1; row < countRows; row++)
         for(int col = 1; col < countCols; col++)
             if(map[row][col] == BombermanTypes::None && (rand() % 5 == 0 || rand() % 5 == 0))
+//            if(map[row][col] == BombermanTypes::None)
                 map[row][col] = BombermanTypes::StoneDestroy;
 }
 
