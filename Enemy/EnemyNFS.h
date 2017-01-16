@@ -38,6 +38,7 @@ protected:
 
     BombermanTypes::DirectionEnum direction = BombermanTypes::Stop;
 
+	void changeDirectionRandom(bool checkCurrent = false);
     void changeDirection(const BombermanTypes::DirectionEnum direct);
 
 //    QGraphicsItem interface

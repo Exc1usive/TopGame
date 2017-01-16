@@ -38,6 +38,8 @@ void EnemyNFS::slotTimerGame()
 
 }
 
+void EnemyNFS:: changeDirectionRandom(bool checkCurrent
+
 void EnemyNFS::changeDirection(const BombermanTypes::DirectionEnum direct)
 {
     if(direct == direction)
