@@ -22,6 +22,9 @@ public:
     explicit BombermanWidget(QWidget *parent = 0);
     ~BombermanWidget();
 
+signals:
+    void sendInstallBomb(QGraphicsItem *item);
+
 private slots:
     void slotSetBomb(QPointF position, QString username, int damage);
     void slotBombDestroyes(QPointF position);

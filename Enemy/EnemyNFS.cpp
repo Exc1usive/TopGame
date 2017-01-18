@@ -156,20 +156,15 @@ void EnemyNFS::slotTimerGame()
             if(item->data(1).toInt() == BombermanTypes::Bomb)
             {
                 qDebug() << "Bomb";
-                if(!inBomb)
+                if(item != inBomb)
                 {
                     qDebug() << "set True";
                     changeDirectionCollisionBomb();
-                    inBomb = true;
+                    inBomb = item;
+                    checkInBomb = true;
                     break;
                 }
             }
-            else
-                if(inBomb)
-                {
-                    qDebug() << "set False";
-                    inBomb = false;
-                }
 
             if(item->data(1).toInt() == BombermanTypes::StoneDestroy || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
             {
@@ -205,8 +200,8 @@ void EnemyNFS::slotTimerGame()
         }
         if(scene()->collidingItems(this).isEmpty())
         {
-            if()
                 inBomb = NULL;
+                checkInBomb = false;
         }
 
         if(!change)

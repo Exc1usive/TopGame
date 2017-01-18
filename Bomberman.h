@@ -26,6 +26,7 @@ signals:
     void setBomb(QPointF _position, QString _username, int _damage);
 
 public slots:
+    void getInstallBomb(QGraphicsItem *item);
 
 private slots:
     void slotTimerFlicker();
@@ -43,7 +44,8 @@ private:
 
     int speed = 4;
 
-    bool inBomb = false;
+    bool checkInBomb = false;
+    QGraphicsItem *inBomb = NULL;
 
     QTimer *timerFlicker;
     QTimer *timerGame;

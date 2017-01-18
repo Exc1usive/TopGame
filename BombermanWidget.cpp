@@ -43,6 +43,7 @@ BombermanWidget::BombermanWidget(QWidget *parent) :
 
     Bomberman *bomberman = new Bomberman("username1");
     connect(bomberman, &Bomberman::setBomb, this, &BombermanWidget::slotSetBomb);
+    connect(this, &BombermanWidget::sendInstallBomb, bomberman, &Bomberman::getInstallBomb);
     bomberman->setPos(48, 80);
     scene->addItem(bomberman);
 
@@ -70,6 +71,8 @@ void BombermanWidget::slotSetBomb(QPointF position, QString username, int damage
     connect(bomb, &Bomb::bombDestroyed, this, &BombermanWidget::slotBombDestroyes);
     bomb->setData(BombermanTypes::Username, username);
     scene->addItem(bomb);
+
+    emit  sendInstallBomb(bomb);
 }
 
 void BombermanWidget::slotBombDestroyes(QPointF position)
@@ -92,6 +95,7 @@ void BombermanWidget::generateStoneNoDestroy()
         map[i][0] = BombermanTypes::StoneNoDestroy;
         map[i][countCols - 1] = BombermanTypes::StoneNoDestroy;
     }
+
     for(int row = 1; row < countRows; row++)
         for(int col = 1; col < countCols; col++)
             if(row % 2 == 0 && col % 2 == 0)

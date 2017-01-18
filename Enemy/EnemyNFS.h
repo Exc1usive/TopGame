@@ -34,8 +34,8 @@ protected:
     int speed = 4;
     int health = 2;
 
-//    bool inBomb = false;
-    Bomb *inBomb = NULL;
+    bool checkInBomb = false;
+    QGraphicsItem *inBomb = NULL;
 
     QTimer *timerFlicker;
     QTimer *timerGame;
