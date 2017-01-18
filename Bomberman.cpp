@@ -41,7 +41,7 @@ void Bomberman::slotTimerFlicker()
 }
 
 void Bomberman::slotTimerGame()
-{    
+{
     if(this->data(BombermanTypes::Hero).toInt() == BombermanTypes::Dead)
         return;
 

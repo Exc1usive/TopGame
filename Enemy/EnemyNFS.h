@@ -11,6 +11,7 @@
 #include <windows.h>
 
 #include "BombermanTypes.h"
+#include "Bomb.h"
 
 class EnemyNFS : public QObject, public QGraphicsItem
 {
@@ -33,7 +34,8 @@ protected:
     int speed = 4;
     int health = 2;
 
-    bool inBomb = false;
+//    bool inBomb = false;
+    Bomb *inBomb = NULL;
 
     QTimer *timerFlicker;
     QTimer *timerGame;

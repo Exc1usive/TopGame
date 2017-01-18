@@ -60,6 +60,7 @@ bool ExplosionUpFinish::checkCollision()
             return true;
         }
     }
+    return false;
 }
 
 void ExplosionUpFinish::slotTimerFlicker()

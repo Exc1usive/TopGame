@@ -11,5 +11,6 @@
         <file>images/32px/sprites/spriteExplosionRightFinish.png</file>
         <file>images/32px/sprites/spriteExplosionUpFinish.png</file>
         <file>images/32px/sprites/spriteExplosionVertical.png</file>
+        <file>images/32px/sprites/spriteExplosionCenter.png</file>
     </qresource>
 </RCC>

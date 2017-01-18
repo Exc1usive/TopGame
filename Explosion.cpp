@@ -8,9 +8,9 @@ Explosion::Explosion(QPointF position, QObject *parent) : QObject(parent), QGrap
     this->setPos(position);
     this->setData(BombermanTypes::Objects, BombermanTypes::ExplosionCenter);
 
-    texture = new QPixmap(":/32px/images/32px/explosionCenter_32px.png");
+    texture = new QPixmap(":/32px/images/32px/sprites/spriteExplosionCenter.png");
     currentFrameX = 0;
-    countFrames = 1;
+    countFrames = 11;
 
     timerFlicker = new QTimer();
     connect(timerFlicker, &QTimer::timeout, this, &Explosion::slotTimerFlicker);
@@ -51,11 +51,11 @@ bool Explosion::checkCollision()
             return true;
         }
     }
+    return false;
 }
 
 void Explosion::slotTimerFlicker()
 {
-
     currentFrameX += sizeCellWidth;
 
     if(currentFrameX >= sizeCellWidth * countFrames)
@@ -71,8 +71,7 @@ QRectF Explosion::boundingRect() const
 
 void Explosion::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-//    painter->drawPixmap(0, 0, *texture, currentFrameX, 0, sizeCellWidth, sizeCellHeight);
-    painter->drawPixmap(0, 0, *texture, 0, 0, sizeCellWidth, sizeCellHeight);
+    painter->drawPixmap(0, 0, *texture, currentFrameX, 0, sizeCellWidth, sizeCellHeight);
     Q_UNUSED(option);
     Q_UNUSED(widget);
 }

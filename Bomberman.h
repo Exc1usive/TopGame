@@ -43,6 +43,8 @@ private:
 
     int speed = 4;
 
+    bool inBomb = false;
+
     QTimer *timerFlicker;
     QTimer *timerGame;
 

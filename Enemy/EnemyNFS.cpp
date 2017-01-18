@@ -205,8 +205,8 @@ void EnemyNFS::slotTimerGame()
         }
         if(scene()->collidingItems(this).isEmpty())
         {
-            if(inBomb)
-                inBomb = false;
+            if()
+                inBomb = NULL;
         }
 
         if(!change)
