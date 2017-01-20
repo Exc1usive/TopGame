@@ -1,6 +1,18 @@
 #ifndef BOMBERMANTYPES_H
 #define BOMBERMANTYPES_H
 
+#include <QLoggingCategory>
+
+Q_DECLARE_LOGGING_CATEGORY(logDebug)
+Q_DECLARE_LOGGING_CATEGORY(logInfo)
+Q_DECLARE_LOGGING_CATEGORY(logWarning)
+Q_DECLARE_LOGGING_CATEGORY(logCritical)
+
+Q_LOGGING_CATEGORY(logDebug,    "Debug")
+Q_LOGGING_CATEGORY(logInfo,     "Info")
+Q_LOGGING_CATEGORY(logWarning,  "Warning")
+Q_LOGGING_CATEGORY(logCritical, "Critical")
+
 namespace BombermanTypes {
     enum { Hero = 0, Objects = 1, Username = 10};
     enum HeroEnum { Dead = 0, Live = 1 };

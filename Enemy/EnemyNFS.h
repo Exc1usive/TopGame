@@ -23,7 +23,20 @@ public:
     void kill();
 
 protected:
+    void readXmlConfig(QString tag);
+
+signals:
+
+public slots:
+
+private slots:
+    void slotTimerFlicker();
+    void slotTimerGame();
+
+private:
     QPixmap *texture;
+
+    QMap <QString, QMap<QString, QString> > textures;
 
     int sizeCellWidth = 32;
     int sizeCellHeight = 32;
@@ -46,18 +59,11 @@ protected:
     void changeDirection(const BombermanTypes::DirectionEnum direct);
     void changeDirectionCollisionBomb();
 
-//    QGraphicsItem interface
+    void setTexture(QString id, int _countFrames, QString path);
+
+    //    QGraphicsItem interface
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
-signals:
-
-public slots:
-
-private slots:
-    void slotTimerFlicker();
-    void slotTimerGame();
-
 };
 
 #endif // ENEMYNFS_H

@@ -3,6 +3,8 @@
 
 #include <QDebug>
 
+#define WALKBOMB true
+
 Bomberman::Bomberman(QString _username, QObject *parent) : QObject(parent), QGraphicsItem()
 {
     setZValue(10);
@@ -64,6 +66,7 @@ void Bomberman::slotTimerGame()
 
             for(QGraphicsItem *item : scene()->collidingItems(this))
             {
+#if WALKBOMB == true
                 if(item->data(1).toInt() == BombermanTypes::Bomb)
                 {
                     qDebug() << inBomb;
@@ -71,6 +74,7 @@ void Bomberman::slotTimerGame()
                         this->setY(this->y() + speed);
 
                 }
+#endif
 
                 if(item->data(1).toInt() == BombermanTypes::StoneDestroy
                         || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
@@ -87,13 +91,15 @@ void Bomberman::slotTimerGame()
 
             for(QGraphicsItem *item : scene()->collidingItems(this))
             {
+#if WALKBOMB == true
                 if(item->data(1).toInt() == BombermanTypes::Bomb)
                 {
                     qDebug() << inBomb;
                     if(item != inBomb)
                         this->setY(this->y() - speed);
-                }
 
+                }
+#endif
                 if(item->data(1).toInt() == BombermanTypes::StoneDestroy
                         || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
                 {
@@ -109,6 +115,7 @@ void Bomberman::slotTimerGame()
 
             for(QGraphicsItem *item : scene()->collidingItems(this))
             {
+#if WALKBOMB == true
                 if(item->data(1).toInt() == BombermanTypes::Bomb)
                 {
                     qDebug() << inBomb;
@@ -116,6 +123,7 @@ void Bomberman::slotTimerGame()
                         this->setX(this->x() - speed);
 
                 }
+#endif
 
                 if(item->data(1).toInt() == BombermanTypes::StoneDestroy
                         || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
@@ -132,6 +140,7 @@ void Bomberman::slotTimerGame()
 
             for(QGraphicsItem *item : scene()->collidingItems(this))
             {
+#if WALKBOMB == true
                 if(item->data(1).toInt() == BombermanTypes::Bomb)
                 {
                     qDebug() << inBomb;
@@ -139,6 +148,7 @@ void Bomberman::slotTimerGame()
                         this->setX(this->x() + speed);
 
                 }
+#endif
 
                 if(item->data(1).toInt() == BombermanTypes::StoneDestroy
                         || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
@@ -168,177 +178,6 @@ void Bomberman::slotTimerGame()
         else
             timerFlicker->stop();
     }
-/*
-    if(GetAsyncKeyState(VK_UP))
-    {
-        changeDirection(BombermanTypes::Up);
-
-        for(QGraphicsItem *item : scene()->collidingItems(this))
-        {
-            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion
-                    || item->data(BombermanTypes::Objects).toInt() == BombermanTypes::ExplosionCenter)
-            {
-                kill();
-                return;
-            }
-        }
-
-        this->setY(this->y() - speed);
-
-        for(QGraphicsItem *item : scene()->collidingItems(this))
-        {
-            if(item->data(1).toInt() == BombermanTypes::Bomb)
-            {
-                qDebug() << "Bomb";
-                if(item != inBomb)
-                {
-                    qDebug() << "set True";
-                    inBomb = item;
-                    checkInBomb = true;
-                    break;
-                }
-            }
-
-            if(item->data(1).toInt() == BombermanTypes::StoneDestroy || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
-            {
-                this->setY(this->y() + speed);
-                break;
-            }
-        }
-    }
-    if(GetAsyncKeyState(VK_DOWN))
-    {
-        changeDirection(BombermanTypes::Down);
-
-        for(QGraphicsItem *item : scene()->collidingItems(this))
-        {
-            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion
-                    || item->data(BombermanTypes::Objects).toInt() == BombermanTypes::ExplosionCenter)
-            {
-                kill();
-                return;
-            }
-        }
-
-        this->setY(this->y() + speed);
-
-        for(QGraphicsItem *item : scene()->collidingItems(this))
-        {
-            if(item->data(1).toInt() == BombermanTypes::Bomb)
-            {
-                qDebug() << "Bomb";
-                if(item != inBomb)
-                {
-                    qDebug() << "set True";
-                    inBomb = item;
-                    checkInBomb = true;
-                    break;
-                }
-            }
-
-            if(item->data(1).toInt() == BombermanTypes::StoneDestroy || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
-            {
-                this->setY(this->y() - speed);
-                break;
-            }
-        }
-    }
-    if(GetAsyncKeyState(VK_RIGHT))
-    {
-        changeDirection(BombermanTypes::Right);
-
-        for(QGraphicsItem *item : scene()->collidingItems(this))
-        {
-            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion
-                    || item->data(BombermanTypes::Objects).toInt() == BombermanTypes::ExplosionCenter)
-            {
-                kill();
-                return;
-            }
-        }
-
-        this->setX(this->x() + speed);
-
-        for(QGraphicsItem *item : scene()->collidingItems(this))
-        {
-            if(item->data(1).toInt() == BombermanTypes::Bomb)
-            {
-                qDebug() << "Bomb";
-                if(item != inBomb)
-                {
-                    qDebug() << "set True";
-                    inBomb = item;
-                    checkInBomb = true;
-                    break;
-                }
-            }
-
-            if(item->data(1).toInt() == BombermanTypes::StoneDestroy || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
-            {
-                this->setX(this->x() - speed);
-                break;
-            }
-        }
-    }
-    if(GetAsyncKeyState(VK_LEFT))
-    {
-        changeDirection(BombermanTypes::Left);
-
-        for(QGraphicsItem *item : scene()->collidingItems(this))
-        {
-            if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion
-                    || item->data(BombermanTypes::Objects).toInt() == BombermanTypes::ExplosionCenter)
-            {
-                kill();
-                return;
-            }
-        }
-
-        this->setX(this->x() - speed);
-
-        for(QGraphicsItem *item : scene()->collidingItems(this))
-        {
-            if(item->data(1).toInt() == BombermanTypes::Bomb)
-            {
-                qDebug() << "Bomb";
-                if(item != inBomb)
-                {
-                    qDebug() << "set True";
-                    inBomb = item;
-                    checkInBomb = true;
-                    break;
-                }
-            }
-
-            if(item->data(1).toInt() == BombermanTypes::StoneDestroy || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
-            {
-                this->setX(this->x() + speed);
-                break;
-            }
-        }
-    }
-
-    if(scene()->collidingItems(this).isEmpty())
-    {
-            inBomb = NULL;
-            checkInBomb = false;
-    }
-
-    if(GetAsyncKeyState(VK_SPACE))
-    {
-        emit setBomb(QPointF((int (this->x()) / 32) * 32, (int (this->y()) / 32) * 32), this->data(BombermanTypes::Username).toString(), damage);
-    }
-
-    if(timerFlicker->isActive())
-    {
-        if(GetAsyncKeyState(VK_UP) || GetAsyncKeyState(VK_DOWN) || GetAsyncKeyState(VK_LEFT) || GetAsyncKeyState(VK_RIGHT))
-        {
-
-        }
-        else
-            timerFlicker->stop();
-    }
-    */
 }
 
 void Bomberman::getInstallBomb(QGraphicsItem *item)

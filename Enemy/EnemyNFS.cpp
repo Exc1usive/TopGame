@@ -31,6 +31,18 @@ void EnemyNFS::kill()
     currentFrameX = 0;
 }
 
+void EnemyNFS::readXmlConfig(QString tag)
+{
+    QLoggingCategory
+}
+
+void EnemyNFS::setTexture(QString id, int _countFrames, QString path)
+{
+    textures[id]["countFrames"] = QString::number(_countFrames);
+    textures[id]["path"] = path;
+    qDebug() << textures;
+}
+
 void EnemyNFS::changeDirectionRandom(bool checkCurrent)
 {
     int newDirection = 1 + rand() % 4;
