@@ -37,7 +37,8 @@ SOURCES += main.cpp\
     ExplosionUpFinish.cpp \
     ExplosionDownFinish.cpp \
     Enemy/EnemyNFS.cpp \
-    Enemy/Coin.cpp
+    Enemy/Coin.cpp \
+    BombermanTypes.cpp
 
 HEADERS  += BombermanWidget.h \
     Bomberman.h \

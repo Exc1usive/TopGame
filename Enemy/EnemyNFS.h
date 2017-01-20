@@ -24,6 +24,7 @@ public:
 
 protected:
     void readXmlConfig(QString tag);
+    void setTexture(QString id, int _countFrames, QString path);
 
 signals:
 
@@ -59,7 +60,6 @@ private:
     void changeDirection(const BombermanTypes::DirectionEnum direct);
     void changeDirectionCollisionBomb();
 
-    void setTexture(QString id, int _countFrames, QString path);
 
     //    QGraphicsItem interface
     QRectF boundingRect() const;
