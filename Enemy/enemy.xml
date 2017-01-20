@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <enemy>
 	<coin>
+		<model sizeWidth="32" sizeHeight="32">
 		<up count = "11">/models/sprites/quandSpriteUp_32px.png</up>
 		<down count = "11">/models/sprites/quandSpriteDown_32px.png</down>
 		<left count = "11">/models/sprites/quandSpriteLeft_32px.png</left>
 		<right count = "11">/models/sprites/quandSpriteRight_32px.png</right>
 		<!-- <dead count = "1">/models/sprites/quandSpriteDead_32px.png</dead> -->
 		<dead count = "1"></dead>
+		</model>
+		<parameter>
+			<speed>4</speed>
+			<health>1</health>
+		</parameter>
 	</coin>
 </enemy>
