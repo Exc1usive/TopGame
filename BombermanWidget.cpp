@@ -15,7 +15,7 @@ BombermanWidget::BombermanWidget(QWidget *parent) :
     srand(time(0));
 
     this->resize(992, 672);
-//    this->setFixedSize(992, 672);r
+//    this->setFixedSize(992, 672);
 
     countCols = 31;
     countRows = 21;

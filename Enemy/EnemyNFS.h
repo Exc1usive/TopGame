@@ -38,15 +38,10 @@ private:
     QPixmap *texture;
 
     QMap <QString, QMap<QString, QString> > textures;
-
-    int sizeCellWidth = 32;
-    int sizeCellHeight = 32;
+    QMap <QString, QString> parameters;
 
     int currentFrameX = 0;
-    int countFrames = 4;
-
-    int speed = 4;
-    int health = 2;
+    int countFrames = 0;
 
     bool checkInBomb = false;
     QGraphicsItem *inBomb = NULL;
