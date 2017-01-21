@@ -5,11 +5,18 @@
 #include <QFile>
 #include <QXmlStreamReader>
 
-EnemyNFS::EnemyNFS(QPointF position, QObject *parent) : QObject(parent), QGraphicsItem()
+EnemyNFS::EnemyNFS(QPointF position, QString _type, QObject *parent) : QObject(parent), QGraphicsItem()
 {
+    type = _type;
+    readXmlConfig(type);
+
+    health = parameters["health"].toInt();
+
     this->setPos(position);
+    this->setZValue(9);
     texture = new QPixmap();
-//    this->setData(BombermanTypes::Hero, BombermanTypes::Live);
+    this->setData(BombermanTypes::EnemyObject, BombermanTypes::Live);
+    qDebug(logDebug()) << "Enemy is created:" << type << "pos:" << this->pos();
 
     timerFlicker = new QTimer();
     connect(timerFlicker, &QTimer::timeout, this, &EnemyNFS::slotTimerFlicker);
@@ -20,6 +27,7 @@ EnemyNFS::EnemyNFS(QPointF position, QObject *parent) : QObject(parent), QGraphi
 
 //    changeDirectionRandom();
     changeDirection(BombermanTypes::Right);
+
 }
 
 EnemyNFS::~EnemyNFS()
@@ -29,15 +37,22 @@ EnemyNFS::~EnemyNFS()
 
 void EnemyNFS::kill()
 {
+    if(--health > 0)
+        return;
+
+    timerGame->stop();
     timerFlicker->stop();
-    texture->load(textures["dead"]["path"]);
+    direction = BombermanTypes::Stop;
+    texture->load(QApplication::applicationDirPath() + textures["dead"]["path"]);
     countFrames = textures["dead"]["count"].toInt();
     currentFrameX = 0;
+    slotTimerFlicker();
+    timerFlicker->start(parameters["timeoutUpdatePicture"].toInt());
 }
 
 void EnemyNFS::readXmlConfig(QString tag)
 {
-    qDebug(logDebug()) << "Read Xml Start" << "\tag:" << tag;
+    qDebug(logDebug()) << "Read Xml Start" << "tag:" << tag;
     QFile file(QApplication::applicationDirPath() + "/enemy/enemy.xml");
 
     if(file.open(QFile::ReadOnly | QFile::Text))
@@ -71,18 +86,12 @@ void EnemyNFS::readXmlConfig(QString tag)
                         parameters[xmlReader.name().toString()] = xmlReader.readElementText();
                 }
             }
+            break;
         }
     }
     qDebug(logDebug()) << textures;
     qDebug(logDebug()) << parameters;
-    qDebug(logDebug()) << "Xml file is read \t tag:" << tag;
-}
-
-void EnemyNFS::setTexture(QString id, int _countFrames, QString path)
-{
-    textures[id]["countFrames"] = QString::number(_countFrames);
-    textures[id]["path"] = path;
-    qDebug(logDebug()) << "log";
+    qDebug(logDebug()) << "Xml file is read tag:" << tag;
 }
 
 void EnemyNFS::changeDirectionRandom(bool checkCurrent)
@@ -121,39 +130,40 @@ void EnemyNFS::changeDirection(const BombermanTypes::DirectionEnum direct)
         if(!timerFlicker->isActive())
         {
             slotTimerFlicker();
-            timerFlicker->start(parameters["timeoutUpdate"].toInt());
+            timerFlicker->start(parameters["timeoutUpdatePicture"].toInt());
         }
         return;
     }
 
     if(direct == BombermanTypes::Up)
     {
-        texture->load(textures["up"]["path"]);
+        qDebug(logDebug()) << texture->load(QApplication::applicationDirPath() + textures["up"]["path"]);
         countFrames = textures["up"]["count"].toInt();
     }
     else
         if(direct == BombermanTypes::Down)
         {
-            texture->load(textures["down"]["path"]);
+            qDebug(logDebug()) << texture->load(QApplication::applicationDirPath() + textures["down"]["path"]);
             countFrames = textures["down"]["count"].toInt();
         }
     else
             if(direct == BombermanTypes::Right)
             {
-                texture->load(textures["right"]["path"]);
+                qDebug(logDebug()) << texture->load(QApplication::applicationDirPath() + textures["right"]["path"]);
                 countFrames = textures["right"]["count"].toInt();
             }
     else
                 if(direct == BombermanTypes::Left)
                 {
-                    texture->load(textures["left"]["path"]);
+                    qDebug(logDebug()) << texture->load(QApplication::applicationDirPath() + textures["left"]["path"]);
                     countFrames = textures["left"]["count"].toInt();
                 }
 
+    qDebug(logDebug()) << "Enemy change direction" << direction << "-" << direct;
     direction = direct;
     currentFrameX = 0;
     slotTimerFlicker();
-    timerFlicker->start(parameters["timeoutUpdate"].toInt());
+    timerFlicker->start(parameters["timeoutUpdatePicture"].toInt());
 }
 
 void EnemyNFS::changeDirectionCollisionBomb()
@@ -188,7 +198,15 @@ void EnemyNFS::slotTimerFlicker()
     currentFrameX += parameters["sizeWidth"].toInt();
 
     if(currentFrameX >= parameters["sizeWidth"].toInt() * countFrames)
-        currentFrameX = 0;
+    {
+        if(direction != BombermanTypes::Stop)
+            currentFrameX = 0;
+        else
+        {
+            qDebug(logDebug()) << "Enemy destroy (" << type << ")";
+            this->deleteLater();
+        }
+    }
 }
 
 void EnemyNFS::slotTimerGame()
@@ -220,10 +238,8 @@ void EnemyNFS::slotTimerGame()
         {
             if(item->data(1).toInt() == BombermanTypes::Bomb)
             {
-                qDebug() << "Bomb";
                 if(item != inBomb)
                 {
-                    qDebug() << "set True";
                     changeDirectionCollisionBomb();
                     inBomb = item;
                     checkInBomb = true;

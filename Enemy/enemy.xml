@@ -10,7 +10,8 @@
 			<!-- <dead count = "1"></dead> -->
 		</model>
 		<parameter>
-			
+			<timeoutGame>20</timeoutGame>
+			<timeoutUpdatePicture>100</timeoutUpdatePicture>
 			<speed>4</speed>
 			<health>1</health>
 		</parameter>

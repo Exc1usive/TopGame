@@ -17,14 +17,12 @@ class EnemyNFS : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
-    explicit EnemyNFS(QPointF position, QObject *parent = 0);
+    explicit EnemyNFS(QPointF position, QString type, QObject *parent = 0);
     ~EnemyNFS();
 
     void kill();
 
 protected:
-    void readXmlConfig(QString tag);
-    void setTexture(QString id, int _countFrames, QString path);
 
 signals:
 
@@ -43,6 +41,9 @@ private:
     int currentFrameX = 0;
     int countFrames = 0;
 
+    QString type;
+    int health = 0;
+
     bool checkInBomb = false;
     QGraphicsItem *inBomb = NULL;
 
@@ -55,6 +56,7 @@ private:
     void changeDirection(const BombermanTypes::DirectionEnum direct);
     void changeDirectionCollisionBomb();
 
+    void readXmlConfig(QString tag);    // Считывает когфиг с xml файла
 
     //    QGraphicsItem interface
     QRectF boundingRect() const;

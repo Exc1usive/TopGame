@@ -1,6 +1,5 @@
 #include "Bomb.h"
 #include "Enemy/EnemyNFS.h"
-#include "Enemy/Coin.h"
 #include "BombermanWidget.h"
 #include "ui_BombermanWidget.h"
 
@@ -48,15 +47,14 @@ BombermanWidget::BombermanWidget(QWidget *parent) :
     bomberman->setPos(48, 80);
     scene->addItem(bomberman);
 
-//    EnemyNFS *enemy = new EnemyNFS(QPointF(64, 32));
-//    scene->addItem(enemy);
+    EnemyNFS *enemy = new EnemyNFS(QPointF(64, 32), "coin");
+    scene->addItem(enemy);
 
-    Coin *coin = new Coin(QPoint(64, 32));
-    scene->addItem(coin);
 }
 
 BombermanWidget::~BombermanWidget()
 {
+    qDebug(logDebug()) << "Game finish";
     delete ui;
 }
 

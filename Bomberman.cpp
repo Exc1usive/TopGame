@@ -10,6 +10,7 @@ Bomberman::Bomberman(QString _username, QObject *parent) : QObject(parent), QGra
     setZValue(10);
     texture = new QPixmap();
     username = _username;
+    this->setData(BombermanTypes::Objects, BombermanTypes::HeroObject);
     this->setData(BombermanTypes::Hero, BombermanTypes::Live);
 
     timerFlicker = new QTimer();
