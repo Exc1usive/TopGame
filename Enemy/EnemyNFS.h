@@ -46,6 +46,7 @@ private:
 
     bool checkInBomb = false;
     QGraphicsItem *inBomb = NULL;
+    QGraphicsItem *explosion = NULL;
 
     QTimer *timerFlicker;
     QTimer *timerGame;

@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
 
 
     BombermanWidget w;
+    w.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     w.show();
 
     return a.exec();

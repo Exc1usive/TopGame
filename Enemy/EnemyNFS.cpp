@@ -5,6 +5,8 @@
 #include <QFile>
 #include <QXmlStreamReader>
 
+#define LOGCHANGEDIRECTION false
+
 EnemyNFS::EnemyNFS(QPointF position, QString _type, QObject *parent) : QObject(parent), QGraphicsItem()
 {
     type = _type;
@@ -15,7 +17,8 @@ EnemyNFS::EnemyNFS(QPointF position, QString _type, QObject *parent) : QObject(p
     this->setPos(position);
     this->setZValue(9);
     texture = new QPixmap();
-    this->setData(BombermanTypes::EnemyObject, BombermanTypes::Live);
+    this->setData(BombermanTypes::Objects, BombermanTypes::EnemyObject);
+    this->setData(BombermanTypes::Enemy, BombermanTypes::Live);
     qDebug(logDebug()) << "Enemy is created:" << type << "pos:" << this->pos();
 
     timerFlicker = new QTimer();
@@ -37,12 +40,14 @@ EnemyNFS::~EnemyNFS()
 
 void EnemyNFS::kill()
 {
+    qDebug(logDebug()) << health - 1;
     if(--health > 0)
         return;
 
     timerGame->stop();
     timerFlicker->stop();
-    direction = BombermanTypes::Stop;
+    this->direction = BombermanTypes::Stop;
+    this->setData(BombermanTypes::Enemy, BombermanTypes::Dead);
     texture->load(QApplication::applicationDirPath() + textures["dead"]["path"]);
     countFrames = textures["dead"]["count"].toInt();
     currentFrameX = 0;
@@ -53,10 +58,10 @@ void EnemyNFS::kill()
 void EnemyNFS::readXmlConfig(QString tag)
 {
     qDebug(logDebug()) << "Read Xml Start" << "tag:" << tag;
-    QFile file(QApplication::applicationDirPath() + "/enemy/enemy.xml");
+    QFile file(QApplication::applicationDirPath() + "/config/enemy.xml");
 
     if(file.open(QFile::ReadOnly | QFile::Text))
-        qDebug(logDebug()) << "Xml file is open";
+        qDebug(logDebug()) << "Xml file is open" << file.fileName();
     else
         qCritical(logCritical()) << "Xml file error" << file.errorString();
 
@@ -89,6 +94,10 @@ void EnemyNFS::readXmlConfig(QString tag)
             break;
         }
     }
+
+    if(file.isOpen())
+        file.close();
+
     qDebug(logDebug()) << textures;
     qDebug(logDebug()) << parameters;
     qDebug(logDebug()) << "Xml file is read tag:" << tag;
@@ -137,29 +146,30 @@ void EnemyNFS::changeDirection(const BombermanTypes::DirectionEnum direct)
 
     if(direct == BombermanTypes::Up)
     {
-        qDebug(logDebug()) << texture->load(QApplication::applicationDirPath() + textures["up"]["path"]);
+        texture->load(QApplication::applicationDirPath() + textures["up"]["path"]);
         countFrames = textures["up"]["count"].toInt();
     }
     else
         if(direct == BombermanTypes::Down)
         {
-            qDebug(logDebug()) << texture->load(QApplication::applicationDirPath() + textures["down"]["path"]);
+            texture->load(QApplication::applicationDirPath() + textures["down"]["path"]);
             countFrames = textures["down"]["count"].toInt();
         }
     else
             if(direct == BombermanTypes::Right)
             {
-                qDebug(logDebug()) << texture->load(QApplication::applicationDirPath() + textures["right"]["path"]);
+                texture->load(QApplication::applicationDirPath() + textures["right"]["path"]);
                 countFrames = textures["right"]["count"].toInt();
             }
     else
                 if(direct == BombermanTypes::Left)
                 {
-                    qDebug(logDebug()) << texture->load(QApplication::applicationDirPath() + textures["left"]["path"]);
+                    texture->load(QApplication::applicationDirPath() + textures["left"]["path"]);
                     countFrames = textures["left"]["count"].toInt();
                 }
-
+#if LOGCHANGEDIRECTION == true
     qDebug(logDebug()) << "Enemy change direction" << direction << "-" << direct;
+#endif
     direction = direct;
     currentFrameX = 0;
     slotTimerFlicker();
@@ -199,10 +209,11 @@ void EnemyNFS::slotTimerFlicker()
 
     if(currentFrameX >= parameters["sizeWidth"].toInt() * countFrames)
     {
-        if(direction != BombermanTypes::Stop)
+        if(this->data(BombermanTypes::Enemy).toInt() != BombermanTypes::Dead)
             currentFrameX = 0;
         else
         {
+            this->update(-parameters["sizeWidth"].toInt() / 2, -parameters["sizeHeight"].toInt() / 2, parameters["sizeWidth"].toInt(), parameters["sizeHeight"].toInt());
             qDebug(logDebug()) << "Enemy destroy (" << type << ")";
             this->deleteLater();
         }
@@ -218,6 +229,10 @@ void EnemyNFS::slotTimerGame()
             if(item->data(BombermanTypes::Objects).toInt() == BombermanTypes::Explosion
                     || item->data(BombermanTypes::Objects).toInt() == BombermanTypes::ExplosionCenter)
             {
+                if(item == explosion)
+                    return;
+
+                explosion = item;
                 kill();
                 return;
             }

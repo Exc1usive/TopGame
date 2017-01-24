@@ -17,7 +17,7 @@ class Bomberman : public QObject, public QGraphicsItem
     Q_OBJECT
 
 public:
-    explicit Bomberman(QString _username, QObject *parent = 0);
+    explicit Bomberman(QString _username, int _idType, QObject *parent = 0);
     ~Bomberman();
     
     void kill();
@@ -31,10 +31,13 @@ public slots:
 private slots:
     void slotTimerFlicker();
     void slotTimerGame();
+    void slotTimerRestart();
 
 private:
     QPixmap *texture;
-    QPixmapCache *textures;
+
+    QMap <int, QMap<QString, QMap<QString, QString> > > textures;
+    QMap <QString, QString> parameters;
 
     int sizeCellWidth = 32;
     int sizeCellHeight = 32;
@@ -42,6 +45,7 @@ private:
     int currentFrameX = 0;
     int countFrames = 4;
 
+    int idType;
     int speed = 4;
 
     bool checkInBomb = false;
@@ -49,6 +53,7 @@ private:
 
     QTimer *timerFlicker;
     QTimer *timerGame;
+    QTimer *timerRestart;
 
     QString username;
     int damage = 3;
@@ -56,6 +61,8 @@ private:
     BombermanTypes::DirectionEnum direction = BombermanTypes::Stop;
 
     void changeDirection(const BombermanTypes::DirectionEnum direct);
+
+    void readXmlConfig();    // Считывает конфиг с xml файла
 
     // QGraphicsItem interface
 protected:

@@ -32,6 +32,8 @@ private slots:
 private:
     Ui::BombermanWidget *ui;
 
+    QMap <QString, QString> parameters;
+
     QGraphicsScene *scene;          // Graphics Scene
     int countRows = 0;              // Count Rows Game Field
     int countCols = 0;              // Count Columns Game Field
@@ -42,6 +44,7 @@ private:
 
     void generateStoneNoDestroy();
     void generateStoneDestroy();
+    void generateEnemy();
     void paintMap();
 };
 

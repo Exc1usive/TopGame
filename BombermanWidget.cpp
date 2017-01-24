@@ -13,7 +13,7 @@ BombermanWidget::BombermanWidget(QWidget *parent) :
 
     srand(time(0));
 
-    this->resize(992, 672);
+    this->resize(994, 674);
 //    this->setFixedSize(992, 672);
 
     countCols = 31;
@@ -39,16 +39,17 @@ BombermanWidget::BombermanWidget(QWidget *parent) :
 
     generateStoneNoDestroy();
     generateStoneDestroy();
+    generateEnemy();
     paintMap();
 
-    Bomberman *bomberman = new Bomberman("username1");
+    Bomberman *bomberman = new Bomberman("username1", 0);
     connect(bomberman, &Bomberman::setBomb, this, &BombermanWidget::slotSetBomb);
     connect(this, &BombermanWidget::sendInstallBomb, bomberman, &Bomberman::getInstallBomb);
     bomberman->setPos(48, 80);
     scene->addItem(bomberman);
 
-    EnemyNFS *enemy = new EnemyNFS(QPointF(64, 32), "coin");
-    scene->addItem(enemy);
+//    EnemyNFS *enemy = new EnemyNFS(QPointF(64, 32), "codin");
+//    scene->addItem(enemy);
 
 }
 
@@ -106,6 +107,10 @@ void BombermanWidget::generateStoneNoDestroy()
     map[1][1] = BombermanTypes::BookPlace;
     map[2][1] = BombermanTypes::BookPlace;
     map[1][2] = BombermanTypes::BookPlace;
+
+    map[countRows - 2][1] = BombermanTypes::BookPlace;
+    map[countRows - 3][1] = BombermanTypes::BookPlace;
+    map[countRows - 2][2] = BombermanTypes::BookPlace;
 }
 
 void BombermanWidget::generateStoneDestroy()
@@ -115,6 +120,23 @@ void BombermanWidget::generateStoneDestroy()
             if(map[row][col] == BombermanTypes::None && (rand() % 5 == 0 || rand() % 5 == 0))
 //            if(map[row][col] == BombermanTypes::None)
                 map[row][col] = BombermanTypes::StoneDestroy;
+}
+
+void BombermanWidget::generateEnemy()
+{
+    parameters["countEnemy"] = "4";
+    int countEnemy = 0;
+    while(countEnemy <= parameters["countEnemy"].toInt())
+    {
+        int row = 1 + rand() % (countRows - 2);
+        int col = 1 + rand() % (countCols - 2);
+
+        if(map[row][col] != BombermanTypes::None)
+            continue;
+
+        map[row][col] = BombermanTypes::EnemyObject;
+        countEnemy++;
+    }
 }
 
 void BombermanWidget::paintMap()
@@ -131,6 +153,11 @@ void BombermanWidget::paintMap()
             {
                 StoneDestroy *stoneDestroy = new StoneDestroy(QPointF(sizeCellWidth * col, sizeCellHeight * row));
                 scene->addItem(stoneDestroy);
+            }
+            if(map[row][col] == BombermanTypes::EnemyObject)
+            {
+                EnemyNFS *enemy = new EnemyNFS(QPointF(sizeCellWidth * col, sizeCellHeight * row), "coin");
+                scene->addItem(enemy);
             }
         }
 }
