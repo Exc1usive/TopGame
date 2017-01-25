@@ -47,9 +47,11 @@ private:
 
     int idType;
     int speed = 4;
+    int health = 1;
 
     bool checkInBomb = false;
     QGraphicsItem *inBomb = NULL;
+    QGraphicsItem *inBomb2 = NULL;
 
     QTimer *timerFlicker;
     QTimer *timerGame;

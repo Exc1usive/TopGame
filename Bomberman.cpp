@@ -39,15 +39,15 @@ Bomberman::~Bomberman()
 
 void Bomberman::kill()
 {
-//    timerGame->stop();
-//    timerFlicker->stop();
-//    direction = BombermanTypes::Stop;
-//    this->setData(BombermanTypes::Hero, BombermanTypes::Dead);
-//    texture->load(QApplication::applicationDirPath() + textures[idType]["dead"]["path"]);
-//    countFrames = textures[idType]["dead"]["count"].toInt();
-//    currentFrameX = 0;
-//    slotTimerFlicker();
-//    timerFlicker->start(parameters["timeoutUpdatePicture"].toInt());
+    timerGame->stop();
+    timerFlicker->stop();
+    direction = BombermanTypes::Stop;
+    this->setData(BombermanTypes::Hero, BombermanTypes::Dead);
+    texture->load(QApplication::applicationDirPath() + textures[idType]["dead"]["path"]);
+    countFrames = textures[idType]["dead"]["count"].toInt();
+    currentFrameX = 0;
+    slotTimerFlicker();
+    timerFlicker->start(parameters["timeoutUpdatePicture"].toInt());
 }
 
 void Bomberman::slotTimerFlicker()
@@ -95,7 +95,7 @@ void Bomberman::slotTimerGame()
                 if(item->data(1).toInt() == BombermanTypes::Bomb)
                 {
 //                    qDebug() << inBomb;
-                    if(item != inBomb)
+                    if(item != inBomb && item != inBomb2)
                         this->setY(this->y() + parameters["speed"].toInt());
 
                 }
@@ -120,7 +120,7 @@ void Bomberman::slotTimerGame()
                 if(item->data(1).toInt() == BombermanTypes::Bomb)
                 {
 //                    qDebug() << inBomb;
-                    if(item != inBomb)
+                    if(item != inBomb && item != inBomb2)
                         this->setY(this->y() - parameters["speed"].toInt());
 
                 }
@@ -144,7 +144,7 @@ void Bomberman::slotTimerGame()
                 if(item->data(1).toInt() == BombermanTypes::Bomb)
                 {
 //                    qDebug() << inBomb;
-                    if(item != inBomb)
+                    if(item != inBomb && item != inBomb2)
                         this->setX(this->x() - parameters["speed"].toInt());
 
                 }
@@ -169,7 +169,7 @@ void Bomberman::slotTimerGame()
                 if(item->data(1).toInt() == BombermanTypes::Bomb)
                 {
 //                    qDebug() << inBomb;
-                    if(item != inBomb)
+                    if(item != inBomb && item != inBomb2)
                         this->setX(this->x() + parameters["speed"].toInt());
                 }
 #endif
@@ -186,7 +186,15 @@ void Bomberman::slotTimerGame()
         if(scene()->collidingItems(this).isEmpty())
         {
                 inBomb = NULL;
+                inBomb2 = NULL;
                 checkInBomb = false;
+        }
+        else
+        {
+            if(!scene()->collidingItems(this).contains(inBomb))
+                inBomb = NULL;
+            if(!scene()->collidingItems(this).contains(inBomb2))
+                inBomb2 = NULL;
         }
     }
 
@@ -212,6 +220,7 @@ void Bomberman::slotTimerRestart()
 
 void Bomberman::getInstallBomb(QGraphicsItem *item)
 {
+    inBomb2 = inBomb;
     inBomb = item;
 }
 

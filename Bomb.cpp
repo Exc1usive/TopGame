@@ -1,22 +1,30 @@
 #include "Bomb.h"
+#include <QApplication>
+#include <QFile>
+#include <QXmlStreamReader>
 
 Bomb::Bomb(QPointF position, int size, QObject *parent) : QObject(parent), QGraphicsItem()
 {
     this->setPos(position);
     this->setData(1, BombermanTypes::Bomb);
-    distanceDamage = size;
 
-//    texture = new QPixmap(":/32px/images/32px/stone_destroy_32px.png");
+    readXmlConfig();
+
+    distanceDamage = parameters["distanceDamageDefault"].toInt();
+    sizeCellWidth = parameters["sizeWidth"].toInt();
+    sizeCellHeight = parameters["sizeHeight"].toInt();
+
+    texture = new QPixmap(QApplication::applicationDirPath() + textures["path"]);
     currentFrameX = 0;
-    countFrames = 1;
+    countFrames = textures["count"];
 
     timerFlicker = new QTimer();
     connect(timerFlicker, &QTimer::timeout, this, &Bomb::slotTimerFlicker);
-    timerFlicker->start(250);
+    timerFlicker->start(parameters["timeoutUpdatePicture"].toInt());
 
     timerDestroy = new QTimer();
     connect(timerDestroy, &QTimer::timeout, this, &Bomb::slotTimerDestroy);
-    timerDestroy->start(2000);
+    timerDestroy->start(parameters["timeoutDestroy"].toInt());
 }
 
 Bomb::~Bomb()
@@ -31,18 +39,19 @@ void Bomb::destroy()
 
 void Bomb::slotTimerFlicker()
 {
-//    currentFrameX += sizeCellWidth;
+    currentFrameX += sizeCellWidth;
 
-//    if(currentFrameX >= sizeCellWidth * countFrames)
+    if(currentFrameX >= sizeCellWidth * countFrames)
 //        this->deleteLater();
-//    else
-//            this->update(0, 0, sizeCellWidth, sizeCellHeight);
+        currentFrameX = 0;
 
-    if(color == Qt::black)
-        color = Qt::red;
-    else
-        color = Qt::black;
-    this->update(0, 0, sizeCellWidth, sizeCellHeight);
+     this->update(0, 0, sizeCellWidth, sizeCellHeight);
+
+//    if(color == Qt::black)
+//        color = Qt::red;
+//    else
+//        color = Qt::black;
+//    this->update(0, 0, sizeCellWidth, sizeCellHeight);
 }
 
 void Bomb::slotTimerDestroy()
@@ -130,6 +139,49 @@ void Bomb::slotTimerDestroy()
     this->deleteLater();
 }
 
+void Bomb::readXmlConfig()
+{
+    QFile file(QApplication::applicationDirPath() + "/config/bomb.xml");
+
+    if(file.open(QFile::ReadOnly | QFile::Text))
+        qDebug(logDebug()) << "Xml file is open:" << file.fileName();
+    else
+        qCritical(logCritical()) << "Xml file error" << file.errorString();
+
+    QXmlStreamReader xmlReader;
+    xmlReader.setDevice(&file);
+    xmlReader.readNext();
+
+    while(xmlReader.readNextStartElement())
+    {
+        if(xmlReader.name() == "bomb")
+        {
+            while(xmlReader.readNextStartElement())
+            {
+                if(xmlReader.name() == "model")
+                {
+                    parameters["sizeWidth"] = xmlReader.attributes().value("sizeWidth").toString();
+                    parameters["sizeHeight"] = xmlReader.attributes().value("sizeHeight").toString();
+                    textures["count"] = xmlReader.attributes().value("count").toString();
+                    textures["path"] = xmlReader.readElementText();
+                }
+                if(xmlReader.name() == "parameter")
+                {
+                    while(xmlReader.readNextStartElement())
+                        parameters[xmlReader.name().toString()] = xmlReader.readElementText();
+                }
+            }
+        }
+    }
+
+    if(file.isOpen())
+        file.close();
+
+    qDebug(logDebug()) << textures;
+    qDebug(logDebug()) << parameters;
+    qDebug(logDebug()) << "Xml file is read:"  << file.fileName();
+}
+
 QRectF Bomb::boundingRect() const
 {
     return QRectF(0, 0, 32, 32);
@@ -137,9 +189,9 @@ QRectF Bomb::boundingRect() const
 
 void Bomb::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-//    painter->drawPixmap(0, 0, *texture, currentFrameX, 0, sizeCellWidth, sizeCellHeight);
-    painter->setBrush(color);
-    painter->drawEllipse(QPointF(16, 16), sizeCellWidth / 4, sizeCellHeight / 4);
+    painter->drawPixmap(0, 0, *texture, currentFrameX, 0, sizeCellWidth, sizeCellHeight);
+//    painter->setBrush(color);
+//    painter->drawEllipse(QPointF(16, 16), sizeCellWidth / 4, sizeCellHeight / 4);
     Q_UNUSED(option);
     Q_UNUSED(widget);
 }
