@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bomb>
+	<model sizeWidth="32" sizeHeight="32" count="4">/models/bomb/spriteBomb.png</model>
+	<parameter>
+		<distanceDamageDefault>1</distanceDamageDefault>
+		<timeoutDestroy>2000</timeoutDestroy>
+		<timeoutUpdatePicture>250</timeoutUpdatePicture>
+	</parameter>
+</bomb>
+<explosions>
+	<explosion-center>
+		<model sizeWidth="32" sizeHeight="32" count="11">/models/bomb/spriteExplosionCenter.png</model>
+	</explosion-center>
+
+	<explosion-horizontal>
+		<model sizeWidth="32" sizeHeight="32" count="11">/models/bomb/spriteExplosionHorizontal.png</model>
+	</explosion-horizontal>
+	
+	<explsion-vertical>
+		<model sizeWidth="32" sizeHeight="32" count="11">/models/bomb/spriteExplosionVertical.png</model>
+	</explsion-vertical>
+
+	<explosion-up>
+		<model sizeWidth="32" sizeHeight="32" count="11">/models/bomb/spriteExplosionUpFinish.png</model>
+	</explosion-up>
+
+	<explosion-down>
+		<model sizeWidth="32" sizeHeight="32" count="11">/models/bomb/spriteExplosionDownFinish.png</model>
+	</explosion-down>
+
+	<explosion-left>
+		<model sizeWidth="32" sizeHeight="32" count="11">/models/bomb/spriteExplosionLeftFinish.png</model>
+	</explosion-left>
+
+	<explosion-rigth>
+		<model sizeWidth="32" sizeHeight="32" count="11">/models/bomb/spriteExplosionRightFinish.png</model>
+	</explosion-rigth>
+
+	<parameter>
+		<timeoutDestroy>500</timeoutDestroy>
+	</parameter>
+</explosions>

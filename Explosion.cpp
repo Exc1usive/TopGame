@@ -5,6 +5,7 @@
 
 #include <QFile>
 #include <QXmlStreamReader>
+#include <QApplication>
 
 Explosion::Explosion(QPointF position, QObject *parent) : QObject(parent), QGraphicsItem()
 {

@@ -16,7 +16,7 @@ Bomb::Bomb(QPointF position, int size, QObject *parent) : QObject(parent), QGrap
 
     texture = new QPixmap(QApplication::applicationDirPath() + textures["path"]);
     currentFrameX = 0;
-    countFrames = textures["count"];
+    countFrames = textures["count"].toInt();
 
     timerFlicker = new QTimer();
     connect(timerFlicker, &QTimer::timeout, this, &Bomb::slotTimerFlicker);

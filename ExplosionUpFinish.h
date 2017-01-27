@@ -30,6 +30,9 @@ private slots:
 private:
     QPixmap *texture;
 
+    QMap<QString, QString> textures;
+    QMap <QString, QString> parameters;
+
     int sizeCellWidth = 32;
     int sizeCellHeight = 32;
 
@@ -37,6 +40,8 @@ private:
     int countFrames = 0;
 
     QTimer *timerFlicker;
+
+    void readXmlConfig();    // Считывает конфиг с xml файлаa
 
     // QGraphicsItem interface
 protected:

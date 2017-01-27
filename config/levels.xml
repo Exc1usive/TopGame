@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<levels count="2">
+	<level number="1">
+		<enemies>
+			<enemy count="5" type="coin"></enemy>
+			<!-- <enemy count="" type=""></enemy> -->
+		</enemies>
+	</level>
+	<!-- <level number="2"> -->
+		<!-- <enemies> -->
+			<!-- <enemy count="" type=""></enemy> -->
+			<!-- <enemy count="" type=""></enemy> -->
+		<!-- </enemies> -->
+	<!-- </level> -->
+</levels>

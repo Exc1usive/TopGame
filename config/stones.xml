@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stoneDestroy>
+	<model sizeWidth="32" sizeHeight="32">
+		<default>/models/stones/stone_destroy_32px.png</default>
+		<destroy count="6">/models/stones/stone_destroy_sprite_32.png</destroy>
+	</model>
+	<parameter>
+		<timeoutDestroy>500</timeoutDestroy>
+	</parameter>
+</stoneDestroy>
+<stoneNoDestroy>
+	<model sizeWidth="32" sizeHeight="32">
+		<default>/models/stones/stone_no_destroy_32px.png</default>
+	</model>
+	<parameter>
+		<timeoutDestroy>500</timeoutDestroy>
+	</parameter>
+</stoneNoDestroy>

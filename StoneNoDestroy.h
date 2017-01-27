@@ -28,8 +28,13 @@ private slots:
 private:
     QPixmap *texture;
 
+    QMap<QString, QString> textures;
+    QMap <QString, QString> parameters;
+
     int sizeCellWidth = 32;
     int sizeCellHeight = 32;
+
+    void readXmlConfig();    // Считывает конфиг с xml файла
 
     // QGraphicsItem interface
 protected:

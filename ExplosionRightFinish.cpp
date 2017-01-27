@@ -3,6 +3,10 @@
 #include "Bomberman.h"
 #include "StoneDestroy.h"
 
+#include <QApplication>
+#include <QFile>
+#include <QXmlStreamReader>
+
 ExplosionRightFinish::ExplosionRightFinish(QPointF position, QObject *parent) : QObject(parent), QGraphicsItem()
 {
     this->setPos(position);
@@ -71,6 +75,56 @@ void ExplosionRightFinish::slotTimerFlicker()
         this->deleteLater();
     else
         this->update(0, 0, sizeCellWidth, sizeCellHeight);
+}
+
+void ExplosionRightFinish::readXmlConfig()
+{
+    QFile file(QApplication::applicationDirPath() + "/config/bomb.xml");
+
+    if(file.open(QFile::ReadOnly | QFile::Text))
+        qDebug(logDebug()) << "Xml file is open:" << file.fileName();
+    else
+        qCritical(logCritical()) << "Xml file error" << file.errorString();
+
+    QXmlStreamReader xmlReader;
+    xmlReader.setDevice(&file);
+    xmlReader.readNext();
+
+    while(xmlReader.readNextStartElement())
+    {
+        if(xmlReader.name() == "explosions")
+        {
+            while(xmlReader.readNextStartElement())
+            {
+                if(xmlReader.name() == "explosion-right")
+                {
+                    while(xmlReader.readNextStartElement())
+                    {
+                        if(xmlReader.name() == "model")
+                        {
+                            parameters["sizeWidth"] = xmlReader.attributes().value("sizeWidth").toString();
+                            parameters["sizeHeight"] = xmlReader.attributes().value("sizeHeight").toString();
+                            textures["count"] = xmlReader.attributes().value("count").toString();
+                            textures["path"] = xmlReader.readElementText();
+                            break;
+                        }
+                    }
+                }
+                if(xmlReader.name() == "parameter")
+                {
+                    while(xmlReader.readNextStartElement())
+                        parameters[xmlReader.name().toString()] = xmlReader.readElementText();
+                }
+            }
+        }
+    }
+
+    if(file.isOpen())
+        file.close();
+
+    qDebug(logDebug()) << textures;
+    qDebug(logDebug()) << parameters;
+    qDebug(logDebug()) << "Xml file is read:"  << file.fileName();
 }
 
 QRectF ExplosionRightFinish::boundingRect() const
