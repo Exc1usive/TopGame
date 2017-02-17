@@ -12,7 +12,4 @@
 	<model sizeWidth="32" sizeHeight="32">
 		<default>/models/stones/stone_no_destroy_32px.png</default>
 	</model>
-	<parameter>
-		<timeoutDestroy>500</timeoutDestroy>
-	</parameter>
 </stoneNoDestroy>

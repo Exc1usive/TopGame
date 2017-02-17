@@ -12,13 +12,17 @@ Explosion::Explosion(QPointF position, QObject *parent) : QObject(parent), QGrap
     this->setPos(position);
     this->setData(BombermanTypes::Objects, BombermanTypes::ExplosionCenter);
 
-    texture = new QPixmap(":/32px/images/32px/sprites/spriteExplosionCenter.png");
+    readXmlConfig();
+
+    texture = new QPixmap(QApplication::applicationDirPath() + textures["path"]);
     currentFrameX = 0;
-    countFrames = 11;
+    countFrames = textures["count"].toInt();
+    sizeCellWidth = parameters["sizeWidth"].toInt();
+    sizeCellHeight = parameters["sizeHeight"].toInt();
 
     timerFlicker = new QTimer();
     connect(timerFlicker, &QTimer::timeout, this, &Explosion::slotTimerFlicker);
-    timerFlicker->start(500 / countFrames);
+    timerFlicker->start(parameters["timeoutDestroy"].toInt() / countFrames);
 }
 
 Explosion::~Explosion()
@@ -97,7 +101,6 @@ void Explosion::readXmlConfig()
                             parameters["sizeHeight"] = xmlReader.attributes().value("sizeHeight").toString();
                             textures["count"] = xmlReader.attributes().value("count").toString();
                             textures["path"] = xmlReader.readElementText();
-                            break;
                         }
                     }
                 }

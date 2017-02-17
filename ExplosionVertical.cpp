@@ -12,9 +12,13 @@ ExplosionVertical::ExplosionVertical(QPointF position, QObject *parent) : QObjec
     this->setPos(position);
     this->setData(BombermanTypes::Objects, BombermanTypes::Explosion);
 
-    texture = new QPixmap(":/32px/images/32px/sprites/spriteExplosionVertical.png");
+    readXmlConfig();
+
+    texture = new QPixmap(QApplication::applicationDirPath() + textures["path"]);
     currentFrameX = 0;
-    countFrames = 11;
+    countFrames = textures["count"].toInt();
+    sizeCellWidth = parameters["sizeWidth"].toInt();
+    sizeCellHeight = parameters["sizeHeight"].toInt();
 
     timerFlicker = new QTimer();
     connect(timerFlicker, &QTimer::timeout, this, &ExplosionVertical::slotTimerFlicker);
@@ -106,7 +110,6 @@ void ExplosionVertical::readXmlConfig()
                             parameters["sizeHeight"] = xmlReader.attributes().value("sizeHeight").toString();
                             textures["count"] = xmlReader.attributes().value("count").toString();
                             textures["path"] = xmlReader.readElementText();
-                            break;
                         }
                     }
                 }

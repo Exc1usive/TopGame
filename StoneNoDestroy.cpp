@@ -8,10 +8,11 @@ StoneNoDestroy::StoneNoDestroy(QPointF position, QObject *parent) : QObject(pare
     this->setPos(position);
     this->setData(1, BombermanTypes::StoneNoDestroy);
 
-    texture = new QPixmap(":/32px/images/32px/stone_no_destroy_32px.png");
+    readXmlConfig();
 
-    sizeCellWidth = 32;
-    sizeCellHeight = 32;
+    texture = new QPixmap(QApplication::applicationDirPath() + textures["path"]);
+    sizeCellWidth = parameters["sizeWidth"].toInt();
+    sizeCellHeight = parameters["sizeHeight"].toInt();
 }
 
 StoneNoDestroy::~StoneNoDestroy()
@@ -32,19 +33,23 @@ void StoneNoDestroy::readXmlConfig()
     xmlReader.setDevice(&file);
     xmlReader.readNext();
 
-    while(xmlReader.readNextStartElement())
+    while(!xmlReader.atEnd())
     {
-        if(xmlReader.name() == "stoneNoDestroy")
+        if(xmlReader.tokenType() != QXmlStreamReader::StartElement)
         {
-            while(xmlReader.readNextStartElement())
+            xmlReader.readNext();
+            continue;
+        }
+        if(xmlReader.name() == "stoneNoDestroy" && xmlReader.tokenType() == QXmlStreamReader::StartElement)
+        {
+            while (xmlReader.readNextStartElement())
             {
                 if(xmlReader.name() == "model")
                 {
                     parameters["sizeWidth"] = xmlReader.attributes().value("sizeWidth").toString();
                     parameters["sizeHeight"] = xmlReader.attributes().value("sizeHeight").toString();
-                    textures["count"] = xmlReader.attributes().value("count").toString();
+                    xmlReader.readNextStartElement();
                     textures["path"] = xmlReader.readElementText();
-                    break;
                 }
                 if(xmlReader.name() == "parameter")
                 {
@@ -53,7 +58,15 @@ void StoneNoDestroy::readXmlConfig()
                 }
             }
         }
+        xmlReader.readNext();
     }
+
+    if(file.isOpen())
+        file.close();
+
+    qDebug(logDebug()) << textures;
+    qDebug(logDebug()) << parameters;
+    qDebug(logDebug()) << "Xml file is read:"  << file.fileName();
 }
 
 QRectF StoneNoDestroy::boundingRect() const

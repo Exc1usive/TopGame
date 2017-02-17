@@ -9,9 +9,12 @@ StoneDestroy::StoneDestroy(QPointF position, QObject *parent) : QObject(parent),
     this->setPos(position);
     this->setData(1, BombermanTypes::StoneDestroy);
 
-    texture = new QPixmap(":/32px/images/32px/stone_destroy_32px.png");
+    readXmlConfig();
+
+    texture = new QPixmap(QApplication::applicationDirPath() + textures["default"]["path"]);
     currentFrameX = 0;
-    countFrames = 1;
+    sizeCellWidth = parameters["sizeWidth"].toInt();
+    sizeCellHeight = parameters["sizeHeight"].toInt();
 
     timerFlicker = new QTimer();
     connect(timerFlicker, &QTimer::timeout, this, &StoneDestroy::slotTimerFlicker);
@@ -24,9 +27,9 @@ StoneDestroy::~StoneDestroy()
 
 void StoneDestroy::destroy()
 {
-    texture->load(":/32px/images/32px/sprites/stone_destroy_sprite_32.png");
+    texture->load(QApplication::applicationDirPath() + textures["destroy"]["path"]);
     currentFrameX = 0;
-    countFrames = 6;
+    countFrames = textures["destroy"]["count"].toInt();
     timerFlicker->start(500 / countFrames);
 }
 
@@ -53,19 +56,26 @@ void StoneDestroy::readXmlConfig()
     xmlReader.setDevice(&file);
     xmlReader.readNext();
 
-    while(xmlReader.readNextStartElement())
+    while(!xmlReader.atEnd())
     {
-        if(xmlReader.name() == "stoneDestroy")
+        if(xmlReader.tokenType() != QXmlStreamReader::StartElement)
         {
-            while(xmlReader.readNextStartElement())
+            xmlReader.readNext();
+            continue;
+        }
+        if(xmlReader.name() == "stoneDestroy" && xmlReader.tokenType() == QXmlStreamReader::StartElement)
+        {
+            while (xmlReader.readNextStartElement())
             {
                 if(xmlReader.name() == "model")
                 {
                     parameters["sizeWidth"] = xmlReader.attributes().value("sizeWidth").toString();
                     parameters["sizeHeight"] = xmlReader.attributes().value("sizeHeight").toString();
-                    textures["count"] = xmlReader.attributes().value("count").toString();
-                    textures["path"] = xmlReader.readElementText();
-                    break;
+                    while(xmlReader.readNextStartElement())
+                    {
+                        textures[xmlReader.name().toString()]["count"] = xmlReader.attributes().value("count").toString();
+                        textures[xmlReader.name().toString()]["path"] = xmlReader.readElementText();
+                    }
                 }
                 if(xmlReader.name() == "parameter")
                 {
@@ -74,6 +84,7 @@ void StoneDestroy::readXmlConfig()
                 }
             }
         }
+        xmlReader.readNext();
     }
 
     if(file.isOpen())

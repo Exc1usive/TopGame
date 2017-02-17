@@ -52,7 +52,7 @@ void EnemyNFS::kill()
     countFrames = textures["dead"]["count"].toInt();
     currentFrameX = 0;
     slotTimerFlicker();
-    timerFlicker->start(parameters["timeoutUpdatePicture"].toInt());
+    timerFlicker->start(parameters["timeoutDestroy"].toInt() / textures["dead"]["count"].toInt());
 }
 
 void EnemyNFS::readXmlConfig(QString tag)
