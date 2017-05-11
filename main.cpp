@@ -7,7 +7,7 @@
 #include <QDateTime>
 #include <QLoggingCategory>
 
-#define LOGINFILE true
+#define LOGINFILE false
 
 #if LOGINFILE == true
 QScopedPointer<QFile>   m_logFile;

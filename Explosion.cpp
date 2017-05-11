@@ -22,7 +22,7 @@ Explosion::Explosion(QPointF position, QObject *parent) : QObject(parent), QGrap
 
     timerFlicker = new QTimer();
     connect(timerFlicker, &QTimer::timeout, this, &Explosion::slotTimerFlicker);
-    timerFlicker->start(parameters["timeoutDestroy"].toInt() / countFrames);
+    timerFlicker->start(500.0 / countFrames);
 }
 
 Explosion::~Explosion()
@@ -74,7 +74,7 @@ void Explosion::slotTimerFlicker()
 
 void Explosion::readXmlConfig()
 {
-    QFile file(QApplication::applicationDirPath() + "/config/bomb.xml");
+    QFile file(QApplication::applicationDirPath() + "/config/explosion.xml");
 
     if(file.open(QFile::ReadOnly | QFile::Text))
         qDebug(logDebug()) << "Xml file is open:" << file.fileName();
@@ -87,29 +87,23 @@ void Explosion::readXmlConfig()
 
     while(xmlReader.readNextStartElement())
     {
-        if(xmlReader.name() == "explosions")
+        if(xmlReader.name() == "explosion-center")
         {
-            while(xmlReader.readNextStartElement())
+            if(xmlReader.readNextStartElement())
             {
-                if(xmlReader.name() == "explosion-center")
+                if(xmlReader.name() == "model")
                 {
-                    while(xmlReader.readNextStartElement())
-                    {
-                        if(xmlReader.name() == "model")
-                        {
-                            parameters["sizeWidth"] = xmlReader.attributes().value("sizeWidth").toString();
-                            parameters["sizeHeight"] = xmlReader.attributes().value("sizeHeight").toString();
-                            textures["count"] = xmlReader.attributes().value("count").toString();
-                            textures["path"] = xmlReader.readElementText();
-                        }
-                    }
-                }
-                if(xmlReader.name() == "parameter")
-                {
-                    while(xmlReader.readNextStartElement())
-                        parameters[xmlReader.name().toString()] = xmlReader.readElementText();
+                    parameters["sizeWidth"] = xmlReader.attributes().value("sizeWidth").toString();
+                    parameters["sizeHeight"] = xmlReader.attributes().value("sizeHeight").toString();
+                    textures["count"] = xmlReader.attributes().value("count").toString();
+                    textures["path"] = xmlReader.readElementText();
                 }
             }
+        }
+        if(xmlReader.name() == "parameter")
+        {
+            while(xmlReader.readNextStartElement())
+                parameters[xmlReader.name().toString()] = xmlReader.readElementText();
         }
     }
 
@@ -128,6 +122,7 @@ QRectF Explosion::boundingRect() const
 
 void Explosion::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    qDebug() << texture;
     painter->drawPixmap(0, 0, *texture, currentFrameX, 0, sizeCellWidth, sizeCellHeight);
     Q_UNUSED(option);
     Q_UNUSED(widget);

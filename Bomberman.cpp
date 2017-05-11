@@ -39,15 +39,26 @@ Bomberman::~Bomberman()
 
 void Bomberman::kill()
 {
-    timerGame->stop();
+//    timerGame->stop();
     timerFlicker->stop();
     direction = BombermanTypes::Stop;
     this->setData(BombermanTypes::Hero, BombermanTypes::Dead);
     texture->load(QApplication::applicationDirPath() + textures[idType]["dead"]["path"]);
     countFrames = textures[idType]["dead"]["count"].toInt();
     currentFrameX = 0;
+    health--;
     slotTimerFlicker();
     timerFlicker->start(parameters["timeoutUpdatePicture"].toInt());
+}
+
+void Bomberman::setStartPos(const QPointF pos)
+{
+    startPos = pos;
+}
+
+void Bomberman::setStartPos(const qreal posX, const qreal posY)
+{
+    startPos = QPointF(posX, posY);
 }
 
 void Bomberman::slotTimerFlicker()
@@ -60,9 +71,16 @@ void Bomberman::slotTimerFlicker()
             currentFrameX = 0;
         else
         {
-            this->update(-parameters["sizeWidth"].toInt() / 2, -parameters["sizeHeight"].toInt() / 2, parameters["sizeWidth"].toInt(), parameters["sizeHeight"].toInt());
-            qDebug(logDebug()) << "Bomberman destroy (" << idType << ";" << username << ")";
+            qDebug() << health;
+            if(health > 0)
+            {
+                this->setData(BombermanTypes::Hero, BombermanTypes::Live);
+                this->setPos(startPos);
+                this->changeDirection(BombermanTypes::Down);
+//            this->update(-parameters["sizeWidth"].toInt() / 2, -parameters["sizeHeight"].toInt() / 2, parameters["sizeWidth"].toInt(), parameters["sizeHeight"].toInt());
+                qDebug(logDebug()) << "Bomberman destroy (" << idType << ";" << username << ")";
 //            this->deleteLater();
+            }
         }
     }
 }
@@ -71,6 +89,8 @@ void Bomberman::slotTimerGame()
 {
     if(this->data(BombermanTypes::Hero).toInt() == BombermanTypes::Dead)
         return;
+
+    qDebug() << this->pos();
 
     if(GetAsyncKeyState(VK_UP) || GetAsyncKeyState(VK_DOWN) || GetAsyncKeyState(VK_RIGHT) || GetAsyncKeyState(VK_LEFT))
     {
@@ -105,6 +125,13 @@ void Bomberman::slotTimerGame()
                         || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
                 {
                     this->setY(this->y() + parameters["speed"].toInt());
+                    if(item->data(1).toInt() == BombermanTypes::StoneNoDestroy && !GetAsyncKeyState(VK_RIGHT) && !GetAsyncKeyState(VK_LEFT))
+                    {
+                        if(item->x() + 16 < this->x())
+                            this->setX(this->x() + parameters["speed"].toInt());
+                        if(item->x() + 16 > this->x())
+                            this->setX(this->x() - parameters["speed"].toInt());
+                    }
                     break;
                 }
             }
@@ -129,6 +156,13 @@ void Bomberman::slotTimerGame()
                         || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
                 {
                     this->setY(this->y() - parameters["speed"].toInt());
+                    if(item->data(1).toInt() == BombermanTypes::StoneNoDestroy && !GetAsyncKeyState(VK_RIGHT) && !GetAsyncKeyState(VK_LEFT))
+                    {
+                        if(item->x() + 16 < this->x())
+                            this->setX(this->x() + parameters["speed"].toInt());
+                        if(item->x() + 16 > this->x())
+                            this->setX(this->x() - parameters["speed"].toInt());
+                    }
                     break;
                 }
             }
@@ -154,6 +188,13 @@ void Bomberman::slotTimerGame()
                         || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
                 {
                     this->setX(this->x() - parameters["speed"].toInt());
+                    if(item->data(1).toInt() == BombermanTypes::StoneNoDestroy && !GetAsyncKeyState(VK_UP) && !GetAsyncKeyState(VK_DOWN))
+                    {
+                        if(item->y() + 16 < this->y())
+                            this->setY(this->y() + parameters["speed"].toInt());
+                        if(item->y() + 16 > this->y())
+                            this->setY(this->y() - parameters["speed"].toInt());
+                    }
                     break;
                 }
             }
@@ -178,6 +219,13 @@ void Bomberman::slotTimerGame()
                         || item->data(1).toInt() == BombermanTypes::StoneNoDestroy)
                 {
                     this->setX(this->x() + parameters["speed"].toInt());
+                    if(item->data(1).toInt() == BombermanTypes::StoneNoDestroy && !GetAsyncKeyState(VK_UP) && !GetAsyncKeyState(VK_DOWN))
+                    {
+                        if(item->y() + 16 < this->y())
+                            this->setY(this->y() + parameters["speed"].toInt());
+                        if(item->y() + 16 > this->y())
+                            this->setY(this->y() - parameters["speed"].toInt());
+                    }
                     break;
                 }
             }

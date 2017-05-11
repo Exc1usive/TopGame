@@ -21,6 +21,8 @@ public:
     ~Bomberman();
     
     void kill();
+    void setStartPos(const QPointF pos);
+    void setStartPos(const qreal posX, const qreal posY);
 
 signals:
     void setBomb(QPointF _position, QString _username, int _damage);
@@ -47,7 +49,7 @@ private:
 
     int idType;
     int speed = 4;
-    int health = 1;
+    int health = 3;
 
     bool checkInBomb = false;
     QGraphicsItem *inBomb = NULL;
@@ -59,6 +61,8 @@ private:
 
     QString username;
     int damage = 3;
+
+    QPointF startPos;
 
     BombermanTypes::DirectionEnum direction = BombermanTypes::Stop;
 

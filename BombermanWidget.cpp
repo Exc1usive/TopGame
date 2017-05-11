@@ -45,7 +45,8 @@ BombermanWidget::BombermanWidget(QWidget *parent) :
     Bomberman *bomberman = new Bomberman("username1", 0);
     connect(bomberman, &Bomberman::setBomb, this, &BombermanWidget::slotSetBomb);
     connect(this, &BombermanWidget::sendInstallBomb, bomberman, &Bomberman::getInstallBomb);
-    bomberman->setPos(48, 80);
+    bomberman->setPos(48, 48);
+    bomberman->setStartPos(48,48);
     scene->addItem(bomberman);
 
 //    EnemyNFS *enemy = new EnemyNFS(QPointF(64, 32), "codin");

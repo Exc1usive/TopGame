@@ -22,7 +22,7 @@ ExplosionLeftFinish::ExplosionLeftFinish(QPointF position, QObject *parent) : QO
 
     timerFlicker = new QTimer();
     connect(timerFlicker, &QTimer::timeout, this, &ExplosionLeftFinish::slotTimerFlicker);
-    timerFlicker->start(500 / countFrames);
+    timerFlicker->start(500. / countFrames);
 }
 
 ExplosionLeftFinish::~ExplosionLeftFinish()
@@ -83,7 +83,7 @@ void ExplosionLeftFinish::slotTimerFlicker()
 
 void ExplosionLeftFinish::readXmlConfig()
 {
-    QFile file(QApplication::applicationDirPath() + "/config/bomb.xml");
+    QFile file(QApplication::applicationDirPath() + "/config/explosion.xml");
 
     if(file.open(QFile::ReadOnly | QFile::Text))
         qDebug(logDebug()) << "Xml file is open:" << file.fileName();
@@ -94,32 +94,27 @@ void ExplosionLeftFinish::readXmlConfig()
     xmlReader.setDevice(&file);
     xmlReader.readNext();
 
-    while(xmlReader.readNextStartElement())
+    while(!xmlReader.atEnd())
     {
-        if(xmlReader.name() == "explosions")
+        if(xmlReader.name() == "explosion-left")
         {
-            while(xmlReader.readNextStartElement())
+            if(xmlReader.readNextStartElement())
             {
-                if(xmlReader.name() == "explosion-left")
+                if(xmlReader.name() == "model")
                 {
-                    while(xmlReader.readNextStartElement())
-                    {
-                        if(xmlReader.name() == "model")
-                        {
-                            parameters["sizeWidth"] = xmlReader.attributes().value("sizeWidth").toString();
-                            parameters["sizeHeight"] = xmlReader.attributes().value("sizeHeight").toString();
-                            textures["count"] = xmlReader.attributes().value("count").toString();
-                            textures["path"] = xmlReader.readElementText();
-                        }
-                    }
-                }
-                if(xmlReader.name() == "parameter")
-                {
-                    while(xmlReader.readNextStartElement())
-                        parameters[xmlReader.name().toString()] = xmlReader.readElementText();
+                    parameters["sizeWidth"] = xmlReader.attributes().value("sizeWidth").toString();
+                    parameters["sizeHeight"] = xmlReader.attributes().value("sizeHeight").toString();
+                    textures["count"] = xmlReader.attributes().value("count").toString();
+                    textures["path"] = xmlReader.readElementText();
                 }
             }
         }
+        if(xmlReader.name() == "parameter")
+        {
+            while(xmlReader.readNextStartElement())
+                parameters[xmlReader.name().toString()] = xmlReader.readElementText();
+        }
+        xmlReader.readNextStartElement();
     }
 
     if(file.isOpen())
