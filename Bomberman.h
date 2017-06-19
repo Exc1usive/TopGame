@@ -37,6 +37,7 @@ private slots:
 
 private:
     QPixmap *texture;
+    QPixmap *textureHeart;
 
     QMap <int, QMap<QString, QMap<QString, QString> > > textures;
     QMap <QString, QString> parameters;

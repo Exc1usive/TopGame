@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>models/bomberman/blue/destroy.png</file>
+        <file>models/bomberman/blue/down.png</file>
+        <file>models/bomberman/blue/left.png</file>
+        <file>models/bomberman/blue/right.png</file>
+        <file>models/bomberman/blue/up.png</file>
+    </qresource>
+</RCC>

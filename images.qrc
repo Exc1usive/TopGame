@@ -4,4 +4,24 @@
         <file>images/32px/stone_no_destroy_32px.png</file>
         <file>images/32px/explosionCenter_32px.png</file>
     </qresource>
+    <qresource prefix="/startMenu">
+        <file>images/startMenu/Exit.png</file>
+        <file>images/startMenu/ExitSelect.png</file>
+        <file>images/startMenu/Game.png</file>
+        <file>images/startMenu/GameInternet.png</file>
+        <file>images/startMenu/GameInternetSelect.png</file>
+        <file>images/startMenu/GameSelect.png</file>
+        <file>images/startMenu/StartMenu.png</file>
+    </qresource>
+    <qresource prefix="/menu">
+        <file>images/menu/Menu.png</file>
+        <file>images/menu/MenuContinue.png</file>
+        <file>images/menu/MenuContinueSelect.png</file>
+        <file>images/menu/menuExit.png</file>
+        <file>images/menu/menuExitSelect.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>images/heart.png</file>
+        <file>images/splash.png</file>
+    </qresource>
 </RCC>

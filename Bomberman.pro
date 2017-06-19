@@ -37,7 +37,8 @@ SOURCES += main.cpp\
     ExplosionUpFinish.cpp \
     ExplosionDownFinish.cpp \
     Enemy/EnemyNFS.cpp \
-    BombermanTypes.cpp
+    BombermanTypes.cpp \
+    BombermanMenu.cpp
 
 HEADERS  += BombermanWidget.h \
     Bomberman.h \
@@ -52,12 +53,14 @@ HEADERS  += BombermanWidget.h \
     ExplosionLeftFinish.h \
     ExplosionUpFinish.h \
     ExplosionDownFinish.h \
-    Enemy/EnemyNFS.h
+    Enemy/EnemyNFS.h \
+    BombermanMenu.h
 
 FORMS    += BombermanWidget.ui
 
 RESOURCES += \
     sprites.qrc \
-    images.qrc
+    images.qrc \
+    bombermans.qrc
 
 STATECHARTS +=

@@ -1,5 +1,6 @@
 #include "Bomb.h"
 #include "Enemy/EnemyNFS.h"
+#include "BombermanMenu.h"
 #include "BombermanWidget.h"
 #include "ui_BombermanWidget.h"
 
@@ -14,7 +15,7 @@ BombermanWidget::BombermanWidget(QWidget *parent) :
     srand(time(0));
 
     this->resize(994, 674);
-//    this->setFixedSize(992, 672);
+    //    this->setFixedSize(992, 672);
 
     countCols = 31;
     countRows = 21;
@@ -37,20 +38,10 @@ BombermanWidget::BombermanWidget(QWidget *parent) :
 
     scene->setSceneRect(0, 0, 992, 672);
 
-    generateStoneNoDestroy();
-    generateStoneDestroy();
-    generateEnemy();
-    paintMap();
+    showStartMenu();
 
-    Bomberman *bomberman = new Bomberman("username1", 0);
-    connect(bomberman, &Bomberman::setBomb, this, &BombermanWidget::slotSetBomb);
-    connect(this, &BombermanWidget::sendInstallBomb, bomberman, &Bomberman::getInstallBomb);
-    bomberman->setPos(48, 48);
-    bomberman->setStartPos(48,48);
-    scene->addItem(bomberman);
-
-//    EnemyNFS *enemy = new EnemyNFS(QPointF(64, 32), "codin");
-//    scene->addItem(enemy);
+    //    EnemyNFS *enemy = new EnemyNFS(QPointF(64, 32), "codin");
+    //    scene->addItem(enemy);
 
 }
 
@@ -87,6 +78,38 @@ void BombermanWidget::slotBombDestroyes(QPointF position)
     map[row][col] = BombermanTypes::None;
 }
 
+void BombermanWidget::slotStartMenuClick(int index)
+{
+    switch (index) {
+        case 1:
+            scene->clear();
+            startComputerGame();
+            break;
+
+        case 2:
+            break;
+
+        case 3:
+            scene->clear();
+            exit(0);
+            break;
+    }
+}
+
+void BombermanWidget::slotMenuClick(int index)
+{
+    switch (index) {
+        case 1:
+            bombermanMenu->deleteLater();
+            bombermanMenu = NULL;
+            break;
+        case 2:
+            scene->clear();
+            showStartMenu();
+            break;
+    }
+}
+
 void BombermanWidget::generateStoneNoDestroy()
 {
     for(int i = 0; i < countCols; i++)
@@ -119,7 +142,7 @@ void BombermanWidget::generateStoneDestroy()
     for(int row = 1; row < countRows; row++)
         for(int col = 1; col < countCols; col++)
             if(map[row][col] == BombermanTypes::None && (rand() % 5 == 0 || rand() % 5 == 0))
-//            if(map[row][col] == BombermanTypes::None)
+                //            if(map[row][col] == BombermanTypes::None)
                 map[row][col] = BombermanTypes::StoneDestroy;
 }
 
@@ -161,4 +184,48 @@ void BombermanWidget::paintMap()
                 scene->addItem(enemy);
             }
         }
+}
+
+void BombermanWidget::showStartMenu()
+{
+    bombermanStartMenu = new BombermanStartMenu();
+    connect(bombermanStartMenu, &BombermanStartMenu::buttonClicked, this, &BombermanWidget::slotStartMenuClick);
+    bombermanStartMenu->setPos(0, 0);
+    scene->addItem(bombermanStartMenu);
+}
+
+void BombermanWidget::showMenu()
+{
+    bombermanMenu = new BombermanMenu();
+    connect(bombermanMenu, &BombermanMenu::buttonClicked, this, &BombermanWidget::slotMenuClick);
+    bombermanMenu->setPos(0, 0);
+    scene->addItem(bombermanMenu);
+}
+
+void BombermanWidget::startComputerGame()
+{
+    generateStoneNoDestroy();
+    generateStoneDestroy();
+    generateEnemy();
+    paintMap();
+
+    Bomberman *bomberman = new Bomberman("username1", 0);
+    connect(bomberman, &Bomberman::setBomb, this, &BombermanWidget::slotSetBomb);
+    connect(this, &BombermanWidget::sendInstallBomb, bomberman, &Bomberman::getInstallBomb);
+    bomberman->setPos(48, 48);
+    bomberman->setStartPos(48,48);
+    scene->addItem(bomberman);
+}
+
+void BombermanWidget::startInternetGame()
+{
+
+}
+
+void BombermanWidget::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Escape)
+    {
+        showMenu();
+    }
 }

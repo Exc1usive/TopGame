@@ -14,9 +14,13 @@ Bomberman::Bomberman(QString _username, int _idType, QObject *parent) : QObject(
     readXmlConfig();
 
     setZValue(10);
+
     texture = new QPixmap();
+    textureHeart = new QPixmap(":/images/heart.png");
+
     username = _username;
     idType = _idType;
+
     qDebug(logDebug()) << "Bomberman:" << username << "is created. Type:" << idType;
 
     this->setData(BombermanTypes::Objects, BombermanTypes::HeroObject);
